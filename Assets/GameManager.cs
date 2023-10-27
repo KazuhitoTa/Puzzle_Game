@@ -6,78 +6,89 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-
 namespace kurukuru
 {
     public class GameManager : MonoBehaviour
     {
         private List<List<GameObject>> grid = new List<List<GameObject>>();
-        private List<List<int>> gridState = new List<List<int>>();
+        private List<List<Panel>> gridState = new List<List<Panel>>();          // Kaneki
         private List<List<Vector3>> tilePosList = new List<List<Vector3>>();
         private List<List<Panel>> panelList = new List<List<Panel>>();
 
+        [SerializeField] private List<PanelPrefab> panelPrefabList=new List<PanelPrefab>();
+
         [SerializeField] private List<GameObject> tilePrefabList;
 
-        int mapSizeX = 6;   // グリッドサイズ(X)
-        int mapSizeY = 6;   // グリッドサイズ(Y)
-        int goalPosX = 0;   // ゴールの位置(X)
-        int goalPosY = 0;   // ゴールの位置(Y)
-        bool tmp = false;
+        [SerializeField]GameObject clearUI;
+
+        private List<bool> clearFlag=new List<bool>();
+
+        int mapSizeX = 5;   // グリッドサイズ(X)           // Kaneki
+        int mapSizeY = 5;   // グリッドサイズ(Y)           // Kaneki
+        Vector2[] goalPos = // ゴールの位置          // Kaneki
+        {
+            new Vector2(-1, -1),    // RED
+            new Vector2(-1, -1),    // GREEN
+            new Vector2(-1, -1),    // BLUE
+        };
+        //bool tmp = false;
         
-        private string path="Assets/StageDate/test.csv";
-        
+        // Kaneki
+        //private string path = "Assets/StageDate/test02.csv";    // 1 Colors
+        private string path = "Assets/StageDate/test.csv";      // 2 Colors
+
         // パネルの構造体
         public struct Panel
         {
             public string col;
             public int num;
-
-            //public Panel(string c, int n)
-            //{
-            //    col = c;
-            //    num = n;
-            //}
         };
 
-        // Start is called before the first frame update
+        // パネルPrefabの構造体
+        [System.Serializable]
+        public struct PanelPrefab
+        {
+            public List<GameObject> colorList;
+        };
+
+        // 色の列挙         // Kaneki
+        enum COLOR
+        {
+            RED = 0,
+            GREEN = 1,
+            BLUE = 2,
+        }
+
         void Start()
         {
             PanelLoading(path);
             GridInit();
         }
 
-        // Update is called once per frame
         void Update()
         {    
             if (Input.GetMouseButtonDown(0)||Input.touchCount > 0)
             {
                 GameObject temp=GetClickObj();
-                //GridStateCheck(temp);
+    
                 GridStateChange(temp);
-                float rotationSpeed = -90.0f; // 回転速度（度/秒）
+                float rotationSpeed = -90.0f; 
                 float rotationAmount = rotationSpeed * Time.deltaTime;
                 temp.transform.Rotate(0,0,rotationSpeed);
 
-                bool tmp = CheckPazzleCorrect();
+                string clickColor = GetColor(temp);
+                Debug.Log(clickColor);
 
                 // パズルの正誤判定
-                if (CheckPazzleCorrect())       SceneManager.LoadScene("StageSelect");
-                //else if (!CheckPazzleCorrect()) Debug.Log("Incorrect...");
+                clearFlag[GetNumber(clickColor)]=CheckPazzleCorrect(clickColor);
+               
+                if(clearFlag[0]&&clearFlag[1]&&clearFlag[2])
+                {
+                    clearUI.SetActive(true);
+                    Debug.Log("clear");
+                }
             }
 
-            if (Input.GetKey(KeyCode.Return) && tmp) {
-                tmp = false;
-                /*
-                Debug.Log("\n" + 
-                    gridState[4][0] + " " + gridState[4][1] + " " + gridState[4][2] + " " + gridState[4][3] + " " + gridState[4][4] + "\n" +
-                    gridState[3][0] + " " + gridState[3][1] + " " + gridState[3][2] + " " + gridState[3][3] + " " + gridState[3][4] + "\n" +
-                    gridState[2][0] + " " + gridState[2][1] + " " + gridState[2][2] + " " + gridState[2][3] + " " + gridState[2][4] + "\n" +
-                    gridState[1][0] + " " + gridState[1][1] + " " + gridState[1][2] + " " + gridState[1][3] + " " + gridState[1][4] + "\n" +
-                    gridState[0][0] + " " + gridState[0][1] + " " + gridState[0][2] + " " + gridState[0][3] + " " + gridState[0][4]
-                    );
-                */
-            }
-            if (!Input.GetKey(KeyCode.Return) && !tmp) tmp = true;
         }
 
         void PanelLoading(string filePath)
@@ -132,16 +143,6 @@ namespace kurukuru
                     listCounter++;
                     //Debug.Log("------"); // 行の終わりに区切りを表示
                 }
-                // デバッグ
-                /*
-                for (int i = 0; i < panelList.Count; i++)
-                {
-                    for (int j = 0; j < panelList[0].Count; j++)
-                    {
-                        Debug.Log(panelList[i][j].col + ", " + panelList[i][j].num);
-                    }
-                }
-                */
             }
             catch (Exception e)
             {
@@ -156,82 +157,65 @@ namespace kurukuru
             for (int i = 0; i < mapSizeX; i++)
             {
                 grid.Add(new List<GameObject>());
-                gridState.Add(new List<int>());
+                gridState.Add(new List<Panel>());           // Kaneki
                 tilePosList.Add(new List<Vector3>());
                 for (int h = 0; h < mapSizeY; h++)
                 {
                     grid[i].Add(null);
-                    gridState[i].Add(0);
+                    gridState[i].Add(new Panel { col = "", num = 0 });          // Kaneki
                     tilePosList[i].Add(new Vector3(0, 0, 0));
                 }
             }
 
-            // -----------------------------------
-            // 本来はココで csvファイル を読み込む
-            // -----------------------------------
-            gridState[4][0] = 4; gridState[4][1] = 2; gridState[4][2] = 2; gridState[4][3] = 2; gridState[4][4] = 8;
-            gridState[3][0] = 1; gridState[3][1] = 4; gridState[3][2] = 2; gridState[3][3] = 2; gridState[3][4] = 5;
-            gridState[2][0] = 3; gridState[2][1] = 6; gridState[2][2] = 0; gridState[2][3] = 0; gridState[2][4] = 1;
-            gridState[1][0] = 0; gridState[1][1] = 0; gridState[1][2] = 4; gridState[1][3] = 2; gridState[1][4] = 6;
-            gridState[0][0] = 7; gridState[0][1] = 2; gridState[0][2] = 6; gridState[0][3] = 0; gridState[0][4] = 0;
-            // ゴール位置の取得
-            for (int y = 0; y < mapSizeY; y++)
+            // マップ生成            // Kaneki
+            for (int r = 0; r < mapSizeY; r++)
             {
-                for (int x = 0; x < mapSizeX; x++)
+                for (int c = 0; c < mapSizeX; c++)
                 {
-                    if (gridState[y][x] == 8)
+                    // panelList の内容を gridState に引き継ぎ
+                    gridState[r][c] = panelList[r][c];
+
+                    //Debug.Log("gridState[" + r + "][" + c + "].col = " + gridState[r][c].col);
+
+                    // ゴール位置の記憶
+                    if (gridState[r][c].num == 11||gridState[r][c].num == 12||gridState[r][c].num == 13||gridState[r][c].num == 14)
                     {
-                        goalPosX = x;
-                        goalPosY = y;
-                        //Debug.Log(goalPosY + ", " + goalPosX);
+                        if      (gridState[r][c].col == "red")    goalPos[(int)COLOR.RED]   = new Vector2(c, r);
+                        else if (gridState[r][c].col == "green")  goalPos[(int)COLOR.GREEN] = new Vector2(c, r);
+                        else if (gridState[r][c].col == "blue")   goalPos[(int)COLOR.BLUE]  = new Vector2(c, r);
                     }
                 }
             }
+
+
+            // ゴール位置の Debug 表示
+            Vector2 invalid = new Vector2(-1, -1);
+            if (goalPos[(int)COLOR.RED]   == invalid) clearFlag.Add(true);
+            else clearFlag.Add(false);
+            if (goalPos[(int)COLOR.GREEN] == invalid) clearFlag.Add(true);
+            else clearFlag.Add(false);
+            if (goalPos[(int)COLOR.BLUE]  == invalid) clearFlag.Add(true);
+            else clearFlag.Add(false);
+
             // ダミーパネルの生成 & パネルのランダム回転
             SetGridRandom();
 
             for (int row = 0; row < mapSizeX; row++)
             {
-                for (int col = 0; col <mapSizeY; col++)
+                for (int col = 0; col < mapSizeY; col++)
                 {
                     Vector3 posTemp=new Vector3(-2+col, -2.5f+row, 0);
                     tilePosList[row][col] = posTemp;
-                    // スタート 左下
-                    if (row==0&&col==0)
-                    {
-                        gridState[row][col]=7;
-                        GameObject tile = Instantiate(tilePrefabList[7], posTemp, tilePrefabList[7].transform.rotation);
-                        grid[row][col]=tile;
-                    }
-                    // ゴール 右上
-                    else if(row==mapSizeX-1&&col==mapSizeY-1)
-                    {
-                        gridState[row][col]=8;
-                        GameObject tile = Instantiate(tilePrefabList[8], posTemp, tilePrefabList[8].transform.rotation);
-                        grid[row][col]=tile;
-                    }
-                    // その他
-                    else
-                    {
-                        GameObject tile = Instantiate(tilePrefabList[gridState[row][col]], posTemp, tilePrefabList[gridState[row][col]].transform.rotation);
-                        grid[row][col] = tile;
-                    }
-                    
-                }
-            }
-        }
 
-        public void GridStateCheck(GameObject tempObject)
-        {
-            for (int row = 0; row < mapSizeX; row++)
-            {
-                for (int col = 0; col <mapSizeY; col++)
-                {
-                    if(tempObject==grid[row][col])
-                    {
-                        //Debug.Log(row);
-                        //Debug.Log(col);
-                    }     
+                    // パネルオブジェクト生成          // Kaneki
+            
+                    int colorNumTemp=GetNumber(gridState[row][col].col);
+                    int  panelGenreTemp=gridState[row][col].num;
+
+                    GameObject tile = Instantiate(panelPrefabList[colorNumTemp].colorList[panelGenreTemp], posTemp, panelPrefabList[colorNumTemp].colorList[panelGenreTemp].transform.rotation);
+                    
+                    grid[row][col] = tile;
+
                 }
             }
         }
@@ -244,12 +228,33 @@ namespace kurukuru
                 {
                     if (tilePosList[row][col] == tempObject.transform.position)
                     {
-                        if (gridState[row][col] == 1)       gridState[row][col] = 2;
-                        else if (gridState[row][col] == 2)  gridState[row][col] = 1;
-                        else if (gridState[row][col] < 6)   gridState[row][col]++;
-                        else if (gridState[row][col] == 6)  gridState[row][col] = 3;
+                        var tmp = gridState[row][col];  // 仮変数
+                        // タップしたパネルの種類毎の gridState 変更処理         // Kaneki
+                        // 1. 直線(縦)の場合
+                        if (gridState[row][col].num == 1)
+                        {
+                            tmp.num = 2;
+                            gridState[row][col] = tmp;
+                        }
+                        // 2. 直線(横)の場合
+                        else if (gridState[row][col].num == 2)
+                        {
+                            tmp.num = 1;
+                            gridState[row][col] = tmp;
+                        }
+                        // 3. L字の場合
+                        else if (gridState[row][col].num < 6)
+                        {
+                            tmp.num++;
+                            gridState[row][col] = tmp;
+                        }
+                        // 3+. L字回転リセット
+                        else if (gridState[row][col].num == 6)
+                        {
+                            tmp.num = 3;
+                            gridState[row][col] = tmp;
+                        }
                     }
-
                     //Debug.Log(gridState[row][col]);
                 }
             }
@@ -275,40 +280,52 @@ namespace kurukuru
 
         }
 
-        // ダミーパネルの生成 & パネルのランダム回転
+        // ダミーパネルの生成 & パネルのランダム回転           // Kaneki
         void SetGridRandom()
         {
-            for (int a = 0; a < mapSizeY; a++)
+            for (int r = 0; r < mapSizeY; r++)
             {
-                for (int b = 0; b < mapSizeX; b++)
+                for (int c = 0; c < mapSizeX; c++)
                 {
-                    switch (gridState[a][b])
+                    var tmp = gridState[r][c];  // 値の入れ替え用の仮変数
+                    // 分岐処理 (パネルのランダム変更)
+                    switch (gridState[r][c].num)
                     {
                         case 0:
-                            gridState[a][b] = UnityEngine.Random.Range(1, 7);
+                            tmp.num = UnityEngine.Random.Range(1, 7);
                             break;
                         case 1:
                         case 2:
-                            gridState[a][b] = UnityEngine.Random.Range(1, 3);
+                            tmp.num = UnityEngine.Random.Range(1, 3);
                             break;
                         case 3:
                         case 4:
                         case 5:
                         case 6:
-                            gridState[a][b] = UnityEngine.Random.Range(3, 7);
+                            tmp.num = UnityEngine.Random.Range(3, 7);
                             break;
                     }
+                    gridState[r][c] = tmp;  // 値入れ替え
                 }
             }
         }
 
         // パズルの正誤判定
-        bool CheckPazzleCorrect()
+        bool CheckPazzleCorrect(string checkColor)
         {
-            int y = goalPosY;
+            Debug.Log("checkColor : " + checkColor);
+            // 判定色の読み込み
+            int tmpcol = 0;
+            if (checkColor == "red") tmpcol = (int)COLOR.RED;
+            else if (checkColor == "green") tmpcol = (int)COLOR.GREEN;
+            else if (checkColor == "blue") tmpcol = (int)COLOR.BLUE;
+            else Debug.Log("checkColor Error");
+            // 座標変数
+            int y = (int)goalPos[tmpcol].y;
             int by = y;
-            int x = goalPosX;
+            int x = (int)goalPos[tmpcol].x;
             int bx = x;
+            // ループステート
             bool fin = false;
 
             while(!fin)
@@ -320,8 +337,15 @@ namespace kurukuru
                     //Debug.Log("Status : " + gridState[y][x]);
                     return false;
                 }
+                // 次のパネルの色が違う場合終了
+                else if (gridState[y][x].col != checkColor)
+                {
+                    Debug.Log("[ Color is Not Much ]");
+                    Debug.Log("x:" + x + " y:" + y);
+                    return false;
+                }
                 // gridState毎の処理
-                switch (gridState[y][x])
+                switch (gridState[y][x].num)
                 {
                     case 0:
                         fin = true;
@@ -404,20 +428,82 @@ namespace kurukuru
                         }
                         else fin = true;
                         break;
-                    case 7: // スタート
-                        return true;
-                    case 8: // ゴール
+                    // スタート
+                    case 7:
+                        if (y < by)
+                        {
+                            return true;
+                        }
+                        else break;
+                    case 8:
+                        if (y > by)
+                        {
+                            return true;
+                        }
+                        else break;
+                    case 9:
+                        if (x > bx)
+                        {
+                            return true;
+                        }
+                        else break;
+                    case 10:
+                        if (x < bx)
+                        {
+                            return true;
+                        }
+                        else break;
+                    // ゴール
+                    case 11:
+                        by = y;
+                        y++;
+                        break;
+                    case 12:
+                        by = y;
+                        y--;
+                        break;
+                    case 13:
                         bx = x;
                         x--;
+                        break;
+                    case 14:
+                        bx = x;
+                        x++;
                         break;
                     default:
                         fin = true;
                         break;
                 }
             }
-            //Debug.Log(y + ", " + x);
-            //Debug.Log("Status : " + gridState[y][x]);
+            
             return false;
+        }
+
+        // クリックされたパネルの色を判別
+        string GetColor(GameObject obj)
+        {
+            for (int i = 0; i < grid.Count; i++)
+            {
+                int j = grid[i].IndexOf(obj);
+                if (j >= 0)
+                {
+                    Panel panelTemp = gridState[i][j];
+                    return panelTemp.col;
+                }
+            }
+            return "Color not found";
+        }
+
+        int GetNumber(string color)
+        {
+            if(color=="red")return 0;
+            else if(color=="green")return 1;
+            else if(color=="blue")return 2;
+            else
+            {
+                Debug.LogError("Color not found");
+                return 0;
+            }
         }
     }
 
