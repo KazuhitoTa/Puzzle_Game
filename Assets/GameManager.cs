@@ -11,31 +11,30 @@ namespace kurukuru
     public class GameManager : MonoBehaviour
     {
         private List<List<GameObject>> grid = new List<List<GameObject>>();
-        private List<List<Panel>> gridState = new List<List<Panel>>();          // Kaneki
+        private List<List<Panel>> gridState = new List<List<Panel>>();          
         private List<List<Vector3>> tilePosList = new List<List<Vector3>>();
         private List<List<Panel>> panelList = new List<List<Panel>>();
 
         [SerializeField] private List<PanelPrefab> panelPrefabList=new List<PanelPrefab>();
 
-        [SerializeField] private List<GameObject> tilePrefabList;
-
         [SerializeField]GameObject clearUI;
 
         private List<bool> clearFlag=new List<bool>();
 
-        int mapSizeX = 5;   // グリッドサイズ(X)           // Kaneki
-        int mapSizeY = 5;   // グリッドサイズ(Y)           // Kaneki
-        Vector2[] goalPos = // ゴールの位置          // Kaneki
+        [SerializeField] GameObject puzzleBoard;
+
+        int mapSizeX = 5;   // グリッドサイズ(X)           
+        int mapSizeY = 5;   // グリッドサイズ(Y)          
+        Vector2[] goalPos = // ゴールの位置          
         {
             new Vector2(-1, -1),    // RED
             new Vector2(-1, -1),    // GREEN
             new Vector2(-1, -1),    // BLUE
         };
-        //bool tmp = false;
         
-        // Kaneki
+        
         //private string path = "Assets/StageDate/test02.csv";    // 1 Colors
-        private string path = "Assets/StageDate/test.csv";      // 2 Colors
+        private string path = "Assets/StageDate/test04.csv";      // 2 Colors
 
         // パネルの構造体
         public struct Panel
@@ -51,7 +50,7 @@ namespace kurukuru
             public List<GameObject> colorList;
         };
 
-        // 色の列挙         // Kaneki
+        // 色の列挙         
         enum COLOR
         {
             RED = 0,
@@ -71,22 +70,31 @@ namespace kurukuru
             {
                 GameObject temp=GetClickObj();
     
-                GridStateChange(temp);
-                float rotationSpeed = -90.0f; 
-                float rotationAmount = rotationSpeed * Time.deltaTime;
-                temp.transform.Rotate(0,0,rotationSpeed);
-
-                string clickColor = GetColor(temp);
-                Debug.Log(clickColor);
-
-                // パズルの正誤判定
-                clearFlag[GetNumber(clickColor)]=CheckPazzleCorrect(clickColor);
-               
-                if(clearFlag[0]&&clearFlag[1]&&clearFlag[2])
+                if(temp!=null)
                 {
-                    clearUI.SetActive(true);
-                    Debug.Log("clear");
+                    GridStateChange(temp);
+                    float rotationSpeed = -90.0f; 
+                    float rotationAmount = rotationSpeed * Time.deltaTime;
+                    temp.transform.Rotate(0,0,rotationSpeed);
+
+                    string clickColor = GetColor(temp);
+                    Debug.Log(clickColor);
+
+                    // パズルの正誤判定
+                    clearFlag[GetNumber(clickColor)]=CheckPazzleCorrect(clickColor);
+
+                    Debug.Log(clearFlag[0]);
+
+                    if(clearFlag[0]&&clearFlag[1]&&clearFlag[2])
+                    {
+                        clearUI.SetActive(true);
+                        Debug.Log("clear");
+                    }
                 }
+                
+                
+
+                
             }
 
         }
@@ -108,7 +116,6 @@ namespace kurukuru
                     }
                 }
 
-                // 
                 int listCounter = 0;    // 行をカウント
                 
 
@@ -148,26 +155,30 @@ namespace kurukuru
             {
                 Debug.LogError("CSV読み込みエラー: " + e.Message);
             }
+
+            mapSizeX=panelList[0].Count;
+            mapSizeY=panelList.Count;
         }
 
 
         void GridInit()
-        {
+        {   
+            
             //2次元配列の初期化
             for (int i = 0; i < mapSizeX; i++)
             {
                 grid.Add(new List<GameObject>());
-                gridState.Add(new List<Panel>());           // Kaneki
+                gridState.Add(new List<Panel>());           
                 tilePosList.Add(new List<Vector3>());
                 for (int h = 0; h < mapSizeY; h++)
                 {
                     grid[i].Add(null);
-                    gridState[i].Add(new Panel { col = "", num = 0 });          // Kaneki
+                    gridState[i].Add(new Panel { col = "", num = 0 });          
                     tilePosList[i].Add(new Vector3(0, 0, 0));
                 }
             }
 
-            // マップ生成            // Kaneki
+            // マップ生成            
             for (int r = 0; r < mapSizeY; r++)
             {
                 for (int c = 0; c < mapSizeX; c++)
@@ -199,20 +210,26 @@ namespace kurukuru
 
             // ダミーパネルの生成 & パネルのランダム回転
             SetGridRandom();
-
+            
             for (int row = 0; row < mapSizeX; row++)
             {
                 for (int col = 0; col < mapSizeY; col++)
                 {
-                    Vector3 posTemp=new Vector3(-2+col, -2.5f+row, 0);
+                    
+                    float tileScaleX=(5f/(float)mapSizeX);
+                    float tileScaleY=(5f/(float)mapSizeY);
+
+                    Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -2f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
+                    if(col==0&&row==0)Debug.Log(tileScaleX);
                     tilePosList[row][col] = posTemp;
 
-                    // パネルオブジェクト生成          // Kaneki
+                    // パネルオブジェクト生成         
             
                     int colorNumTemp=GetNumber(gridState[row][col].col);
                     int  panelGenreTemp=gridState[row][col].num;
 
                     GameObject tile = Instantiate(panelPrefabList[colorNumTemp].colorList[panelGenreTemp], posTemp, panelPrefabList[colorNumTemp].colorList[panelGenreTemp].transform.rotation);
+                    tile.transform.localScale = new Vector3(tileScaleX,tileScaleY,1);
                     
                     grid[row][col] = tile;
 
@@ -229,7 +246,7 @@ namespace kurukuru
                     if (tilePosList[row][col] == tempObject.transform.position)
                     {
                         var tmp = gridState[row][col];  // 仮変数
-                        // タップしたパネルの種類毎の gridState 変更処理         // Kaneki
+                        // タップしたパネルの種類毎の gridState 変更処理         
                         // 1. 直線(縦)の場合
                         if (gridState[row][col].num == 1)
                         {
@@ -280,7 +297,8 @@ namespace kurukuru
 
         }
 
-        // ダミーパネルの生成 & パネルのランダム回転           // Kaneki
+        // ダミーパネルの生成 & パネルのランダム回転           
+        // ダミーパネルの生成 & パネルのランダム回転
         void SetGridRandom()
         {
             for (int r = 0; r < mapSizeY; r++)
@@ -291,17 +309,36 @@ namespace kurukuru
                     // 分岐処理 (パネルのランダム変更)
                     switch (gridState[r][c].num)
                     {
+                        // Kaneki
+                        // 1. 空白
                         case 0:
+                            // clearFlag が false の色のみ取得
+                            List<string> strings = new List<string>();
+                            if (!clearFlag[(int)COLOR.RED])   strings.Add("red");
+                            if (!clearFlag[(int)COLOR.GREEN]) strings.Add("green");
+                            if (!clearFlag[(int)COLOR.BLUE])  strings.Add("blue");
+                            // 全てのフラグが立っている場合
+                            if (strings.Count <= 0)
+                            {
+                                Debug.Log("All clearFlag is True");
+                                break;
+                            }
+                            // ランダム化
+                            tmp.col = strings[UnityEngine.Random.Range(0, strings.Count)];
                             tmp.num = UnityEngine.Random.Range(1, 7);
                             break;
+                        // 2. 縦 or 横
                         case 1:
                         case 2:
+                            // ランダム化
                             tmp.num = UnityEngine.Random.Range(1, 3);
                             break;
+                        // 3. L字
                         case 3:
                         case 4:
                         case 5:
                         case 6:
+                            // ランダム化
                             tmp.num = UnityEngine.Random.Range(3, 7);
                             break;
                     }
@@ -313,6 +350,8 @@ namespace kurukuru
         // パズルの正誤判定
         bool CheckPazzleCorrect(string checkColor)
         {
+            bool check=false;
+
             Debug.Log("checkColor : " + checkColor);
             // 判定色の読み込み
             int tmpcol = 0;
@@ -430,27 +469,43 @@ namespace kurukuru
                         break;
                     // スタート
                     case 7:
-                        if (y < by)
+                        if (y < by&&check)
                         {
                             return true;
+                        }
+                        else if (y < by)
+                        {
+                            return false;
                         }
                         else break;
                     case 8:
-                        if (y > by)
+                        if (y > by&&check)
                         {
                             return true;
+                        }
+                        else if (y > by)
+                        {
+                            return false;
                         }
                         else break;
                     case 9:
-                        if (x > bx)
+                        if (x > bx&&check)
                         {
                             return true;
                         }
+                        else if(x > bx)
+                        {
+                            return false;
+                        }
                         else break;
                     case 10:
-                        if (x < bx)
+                        if (x < bx&&check)
                         {
                             return true;
+                        }
+                        else if (x < bx)
+                        {
+                            return false;
                         }
                         else break;
                     // ゴール
@@ -470,6 +525,37 @@ namespace kurukuru
                         bx = x;
                         x++;
                         break;
+                    case 15:
+                        if (y > by)
+                        {
+                            by = y;
+                            y++;
+                            check=true;
+                        }
+                        else if (y < by)
+                        {
+                            by = y;
+                            y--;
+                            check=true;
+                        }
+                        else fin = true;
+                        break;
+                    case 16:
+                        if (x > bx)
+                        {
+                            bx = x;
+                            x++;
+                            check=true;
+                        }
+                        else if (x < bx)
+                        {
+                            bx = x;
+                            x--;
+                            check=true;
+                        }
+                        else fin = true;
+                        break;
+                    
                     default:
                         fin = true;
                         break;
