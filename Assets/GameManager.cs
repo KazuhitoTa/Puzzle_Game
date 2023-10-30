@@ -22,6 +22,7 @@ namespace kurukuru
         private List<bool> clearFlag=new List<bool>();
 
         [SerializeField] GameObject puzzleBoard;
+        private List<bool> flowmeterCheck=new List<bool>();
 
         int mapSizeX = 5;   // グリッドサイズ(X)           
         int mapSizeY = 5;   // グリッドサイズ(Y)          
@@ -34,7 +35,7 @@ namespace kurukuru
         
         
         //private string path = "Assets/StageDate/test02.csv";    // 1 Colors
-        private string path = "Assets/StageDate/test04.csv";      // 2 Colors
+        private string path = "Assets/StageDate/test.csv";      // 2 Colors
 
         // パネルの構造体
         public struct Panel
@@ -87,14 +88,14 @@ namespace kurukuru
 
                     if(clearFlag[0]&&clearFlag[1]&&clearFlag[2])
                     {
+                        foreach (Transform child in puzzleBoard.transform)
+                        {
+                            Destroy(child.gameObject);
+                        }
                         clearUI.SetActive(true);
                         Debug.Log("clear");
                     }
                 }
-                
-                
-
-                
             }
 
         }
@@ -163,7 +164,12 @@ namespace kurukuru
 
         void GridInit()
         {   
-            
+            //配列の初期化
+            for(int i=0;i<3;i++)
+            {
+                flowmeterCheck.Add(true);
+            }
+
             //2次元配列の初期化
             for (int i = 0; i < mapSizeX; i++)
             {
@@ -185,6 +191,14 @@ namespace kurukuru
                 {
                     // panelList の内容を gridState に引き継ぎ
                     gridState[r][c] = panelList[r][c];
+                    
+                    //流量計があるか確認
+                    if(gridState[r][c].num==15||gridState[r][c].num==16)
+                    {
+                        if(gridState[r][c].col=="red")flowmeterCheck[0]=false;
+                        else if (gridState[r][c].col == "green")flowmeterCheck[1]=false;
+                        else if (gridState[r][c].col == "blue")flowmeterCheck[2]=false;
+                    }
 
                     //Debug.Log("gridState[" + r + "][" + c + "].col = " + gridState[r][c].col);
 
@@ -215,22 +229,32 @@ namespace kurukuru
             {
                 for (int col = 0; col < mapSizeY; col++)
                 {
-                    
+                    //マスの数によってTileの大きさ変更
                     float tileScaleX=(5f/(float)mapSizeX);
                     float tileScaleY=(5f/(float)mapSizeY);
 
+                    //生成位置
                     Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -2f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
-                    if(col==0&&row==0)Debug.Log(tileScaleX);
+                    
+                    //生成する座標をtilePosListに保存
                     tilePosList[row][col] = posTemp;
 
-                    // パネルオブジェクト生成         
-            
+                    // パネルの番号を仮置き         
                     int colorNumTemp=GetNumber(gridState[row][col].col);
+                    
+                    //パネルの種類を仮置き
                     int  panelGenreTemp=gridState[row][col].num;
 
+                    //Tileを生成してする
                     GameObject tile = Instantiate(panelPrefabList[colorNumTemp].colorList[panelGenreTemp], posTemp, panelPrefabList[colorNumTemp].colorList[panelGenreTemp].transform.rotation);
-                    tile.transform.localScale = new Vector3(tileScaleX,tileScaleY,1);
                     
+                    //生成したTileの大きさを変更
+                    tile.transform.localScale = new Vector3(tileScaleX,tileScaleY,1);
+
+                    //puzzleBoardの子供オブジェクトにする
+                    tile.transform.parent=puzzleBoard.transform;
+                    
+                    //生成したTileをgridに保存
                     grid[row][col] = tile;
 
                 }
@@ -298,7 +322,6 @@ namespace kurukuru
         }
 
         // ダミーパネルの生成 & パネルのランダム回転           
-        // ダミーパネルの生成 & パネルのランダム回転
         void SetGridRandom()
         {
             for (int r = 0; r < mapSizeY; r++)
@@ -309,7 +332,6 @@ namespace kurukuru
                     // 分岐処理 (パネルのランダム変更)
                     switch (gridState[r][c].num)
                     {
-                        // Kaneki
                         // 1. 空白
                         case 0:
                             // clearFlag が false の色のみ取得
@@ -469,7 +491,7 @@ namespace kurukuru
                         break;
                     // スタート
                     case 7:
-                        if (y < by&&check)
+                        if (y < by&&(check||flowmeterCheck[GetNumber(checkColor)]))
                         {
                             return true;
                         }
@@ -479,7 +501,7 @@ namespace kurukuru
                         }
                         else break;
                     case 8:
-                        if (y > by&&check)
+                        if (y > by&&(check||flowmeterCheck[GetNumber(checkColor)]))
                         {
                             return true;
                         }
@@ -489,7 +511,7 @@ namespace kurukuru
                         }
                         else break;
                     case 9:
-                        if (x > bx&&check)
+                        if (x > bx&&(check||flowmeterCheck[GetNumber(checkColor)]))
                         {
                             return true;
                         }
@@ -499,7 +521,7 @@ namespace kurukuru
                         }
                         else break;
                     case 10:
-                        if (x < bx&&check)
+                        if (x < bx&&(check||flowmeterCheck[GetNumber(checkColor)]))
                         {
                             return true;
                         }
