@@ -25,7 +25,20 @@ namespace kurukuru
         private List<bool> flowmeterCheck=new List<bool>();
 
         int mapSizeX = 5;   // グリッドサイズ(X)           
-        int mapSizeY = 5;   // グリッドサイズ(Y)          
+        int mapSizeY = 5;   // グリッドサイズ(Y)
+
+        private GameObject clickObject;     // クリックオブジェクト
+        private float rotateSpeed = 600.0f; // 回転速度
+        private bool isRotate = false;      // 回転しているかをチェックする
+        private float startAngleZ = 0.0f;   // 回転開始時のZ角度
+        private float deltaAngleZ = 0.0f;   // 回転したZ角度
+
+        private int score = 0;  // パズルを解いて得たスコア
+        private bool allColorCorrect = false;
+        int separateCount = 0;  // パズル間の管理
+
+
+
         Vector2[] goalPos = // ゴールの位置          
         {
             new Vector2(-1, -1),    // RED
@@ -61,104 +74,135 @@ namespace kurukuru
 
         void Start()
         {
-            PanelLoading(path);
+            PanelLoading();
             GridInit();
         }
 
         void Update()
         {    
-            if (Input.GetMouseButtonDown(0)||Input.touchCount > 0)
+            if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && (GetClickObj()) && (!isRotate))
             {
-                GameObject temp=GetClickObj();
-    
-                if(temp!=null)
-                {
-                    GridStateChange(temp);
-                    float rotationSpeed = -90.0f; 
-                    float rotationAmount = rotationSpeed * Time.deltaTime;
-                    temp.transform.Rotate(0,0,rotationSpeed);
+                // 回転計算の初期化
+                isRotate = true;
+                clickObject = GetClickObj();
+                startAngleZ = clickObject.transform.localEulerAngles.z;
+                //Debug.Log("startAngleZ : " + startAngleZ);
+            }
 
-                    string clickColor = GetColor(temp);
-                    Debug.Log(clickColor);
+            if (isRotate)
+            {
+                // 回転計算
+                if (startAngleZ == 0) startAngleZ = 360;
+                clickObject.transform.Rotate(0, 0, rotateSpeed * Time.deltaTime * -1);
+                deltaAngleZ = startAngleZ - clickObject.transform.localEulerAngles.z;
+                // 90度ずつ回転させる
+                if (Math.Abs(deltaAngleZ) >= 90)
+                {
+                    isRotate = false;
+                    clickObject.transform.localEulerAngles = new Vector3(0, 0, startAngleZ - 90);
+
+                    // gridState を変える
+                    GridStateChange(clickObject);
+
+                    string clickColor = GetColor(clickObject);
+                    //Debug.Log(clickColor);
 
                     // パズルの正誤判定
-                    clearFlag[GetNumber(clickColor)]=CheckPazzleCorrect(clickColor);
+                    clearFlag[GetNumber(clickColor)] = CheckPazzleCorrect(clickColor);
 
-                    Debug.Log(clearFlag[0]);
+                    //Debug.Log(clearFlag[0]);
 
-                    if(clearFlag[0]&&clearFlag[1]&&clearFlag[2])
+                    // 全ての clearFlag が true ならクリア
+                    if (clearFlag[0] && clearFlag[1] && clearFlag[2])
                     {
-                        foreach (Transform child in puzzleBoard.transform)
-                        {
-                            Destroy(child.gameObject);
-                        }
-                        clearUI.SetActive(true);
-                        Debug.Log("clear");
+                        allColorCorrect = true;
+                        //clearUI.SetActive(true);
+                        //Debug.Log("clear");
                     }
                 }
+            }
+
+            if (allColorCorrect)
+            {
+                if (separateCount >= 300)
+                {
+                    ResetPazzle();                    
+                    PanelLoading();
+                    GridInit();
+                }
+                else separateCount++;
             }
 
         }
 
-        void PanelLoading(string filePath)
+        void PanelLoading()
         {
-            try
+            TextAsset[] csvFiles = Resources.LoadAll<TextAsset>("StageData");
+            if (csvFiles != null && csvFiles.Length > 0)
             {
-                List<string[]> data = new List<string[]>();
-
-                // ファイルの全体を読み込み、各行をリストに格納
-                using (StreamReader reader = new StreamReader(filePath))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        string line = reader.ReadLine();
-                        string[] elements = line.Split(','); // カンマで要素を分割
-                        data.Add(elements);
-                    }
-                }
-
+                // ランダムにファイルを選択
+                int randomIndex = UnityEngine.Random.Range(0, csvFiles.Length);
+                TextAsset randomCSV = csvFiles[randomIndex];
+                //Debug.Log("csvFiles.Length : " + csvFiles.Length);
+                Debug.Log("randomIndex : " + randomIndex);
                 int listCounter = 0;    // 行をカウント
-                
-
-                foreach (string[] elements in data)
+                //Debug.Log(randomCSV);
+                if (randomCSV != null)
                 {
-                    panelList.Add(new List<Panel>());
-                    int elementCounter = 0; //要素数をカウント（奇数番目、偶数番目を識別）
-                    string tempColor = "";  // 色
-                    int tempNumber = 0;     // 数字
+                    // CSV ファイルの中身を取得
+                    string csvText = randomCSV.text;
 
-                    foreach (string element in elements)
+
+
+                    // 例: CSV テキストを改行で分割して行ごとに処理
+                    string[] lines = csvText.Split('\n');
+
+                    panelList.Clear();
+
+                    foreach (string line in lines)
                     {
-
-                        if (elementCounter % 2 == 0) // 偶数番目（csvの奇数番目）は色
+                        if (!string.IsNullOrEmpty(line))    // 行が空でない場合に処理を行う
                         {
-                            tempColor = element;
-                        }
-                        else // 奇数番目（csvの偶数番目）は数字
-                        {
-                            if(int.TryParse(element, out tempNumber))
+                            
+                            string[] elements = line.Split(',');
+                            panelList.Add(new List<Panel>());
+                            int elementCounter = 0; //要素数をカウント（奇数番目、偶数番目を識別）
+                            string tempColor = "";  // 色
+                            int tempNumber = 0;     // 数字
+                            foreach (string element in elements)
                             {
-                                panelList[listCounter].Add(new Panel { col = tempColor, num = tempNumber });
-                                //Debug.Log("読み込み：　" + tempColor + ", " + tempNumber);
+                            
+                                if (elementCounter % 2 == 0) // 偶数番目（csvの奇数番目）は色
+                                {
+                                    tempColor = element;
+                                }
+                                else // 奇数番目（csvの偶数番目）は数字
+                                {
+                                    if (int.TryParse(element, out tempNumber))
+                                    {
+                                        panelList[listCounter].Add(new Panel { col = tempColor, num = tempNumber });
+                                        //Debug.Log(listCounter + "行目" + elementCounter / 2 + "個目");
+                                        //Debug.Log("読み込み：　" + tempColor + ", " + tempNumber);
+                                    }
+                                    else
+                                    {
+                                        //Debug.Log("読み込み失敗：　" + listCounter + "," + elementCounter / 2 + "番目");
+                                    }
+                                }
+                                elementCounter++;
                             }
-                            else
-                            {
-                                Debug.Log("読み込み失敗：　" + listCounter + "," + elementCounter/2 + "番目");
-                            }
+                            listCounter++;
                         }
-                        elementCounter++;
                     }
-                    listCounter++;
-                    //Debug.Log("------"); // 行の終わりに区切りを表示
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("CSV読み込みエラー: " + e.Message);
-            }
 
-            mapSizeX=panelList[0].Count;
-            mapSizeY=panelList.Count;
+            }
+            else
+            {
+                Debug.LogError("CSV ファイルが見つかりませんでした。");
+            }
+            mapSizeX = panelList[0].Count;
+            mapSizeY = panelList.Count;
         }
 
 
@@ -374,7 +418,7 @@ namespace kurukuru
         {
             bool check=false;
 
-            Debug.Log("checkColor : " + checkColor);
+            //Debug.Log("checkColor : " + checkColor);
             // 判定色の読み込み
             int tmpcol = 0;
             if (checkColor == "red") tmpcol = (int)COLOR.RED;
@@ -401,8 +445,8 @@ namespace kurukuru
                 // 次のパネルの色が違う場合終了
                 else if (gridState[y][x].col != checkColor)
                 {
-                    Debug.Log("[ Color is Not Much ]");
-                    Debug.Log("x:" + x + " y:" + y);
+                    //Debug.Log("[ Color is Not Much ]");
+                    //Debug.Log("x:" + x + " y:" + y);
                     return false;
                 }
                 // gridState毎の処理
@@ -532,21 +576,38 @@ namespace kurukuru
                         else break;
                     // ゴール
                     case 11:
-                        by = y;
-                        y++;
+                        if ((by == y) && (bx == x))
+                        {
+                            by = y;
+                            y++;
+                        }
+                        else return false;
                         break;
                     case 12:
-                        by = y;
-                        y--;
+                    if ((by == y) && (bx == x))
+                        {
+                            by = y;
+                            y--;
+                        }
+                        else return false;
                         break;
                     case 13:
-                        bx = x;
-                        x--;
+                    if ((by == y) && (bx == x))
+                        {
+                            bx = x;
+                            x--;
+                        }
+                        else return false;
                         break;
                     case 14:
-                        bx = x;
-                        x++;
+                    if ((by == y) && (bx == x))
+                        {
+                            bx = x;
+                            x++;
+                        }
+                        else return false;
                         break;
+                    // 流量計
                     case 15:
                         if (y > by)
                         {
@@ -612,6 +673,56 @@ namespace kurukuru
                 Debug.LogError("Color not found");
                 return 0;
             }
+        }
+
+        // パズルをクリアした時にリセット
+        void ResetPazzle()
+        {
+            // Add score
+            score += 100;
+
+            // Clear Lists
+            for (int i = 0; i < mapSizeX; i++)
+            {
+                // grid
+                grid[i].Clear();
+                // gridState
+                gridState[i].Clear();
+                // tilePosList
+                tilePosList[i].Clear();
+                // panelList
+                panelList[i].Clear();
+            }
+            // grid
+            grid.Clear();
+            // gridState
+            gridState.Clear();
+            // tilePosList
+            tilePosList.Clear();
+            // paneList
+            panelList.Clear();
+
+            //flowmeterCheck
+            flowmeterCheck.Clear();
+
+            // Clear clearFlag
+            clearFlag.Clear();
+
+            // Clear Objects
+            foreach (Transform child in puzzleBoard.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            clickObject = null;
+
+            // Clear goalPos
+            goalPos[(int)COLOR.RED] = new Vector2(-1, -1);
+            goalPos[(int)COLOR.GREEN] = new Vector2(-1, -1);
+            goalPos[(int)COLOR.BLUE] = new Vector2(-1, -1);
+
+            // Clear Correct Data
+            allColorCorrect = false;
+            separateCount = 0;
         }
     }
 
