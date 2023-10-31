@@ -729,7 +729,8 @@ namespace kurukuru
                         {
                             return false;
                         }
-                        else break;
+                        else fin=true; 
+                        break;
                     case 8:
                         if (y > by&&(check||flowmeterCheck[GetNumber(checkColor)]))
                         {
@@ -739,7 +740,8 @@ namespace kurukuru
                         {
                             return false;
                         }
-                        else break;
+                        else fin=true;  
+                        break;
                     case 9:
                         if (x > bx&&(check||flowmeterCheck[GetNumber(checkColor)]))
                         {
@@ -749,7 +751,8 @@ namespace kurukuru
                         {
                             return false;
                         }
-                        else break;
+                        else fin=true;  
+                        break;
                     case 10:
                         if (x < bx&&(check||flowmeterCheck[GetNumber(checkColor)]))
                         {
@@ -759,7 +762,8 @@ namespace kurukuru
                         {
                             return false;
                         }
-                        else break;
+                        else fin=true; 
+                        break;
                     // ゴール
                     case 11:
                         if ((by == y) && (bx == x))
