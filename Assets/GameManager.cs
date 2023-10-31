@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
@@ -16,6 +17,13 @@ namespace kurukuru
         private List<List<Panel>> panelList = new List<List<Panel>>();
 
         [SerializeField] private List<PanelPrefab> panelPrefabList=new List<PanelPrefab>();
+
+
+        //ta
+        [SerializeField]private GameObject hpBar;
+        [SerializeField]private Image hpBarImage;
+        [SerializeField] private float maxHp = 100f; // 例として初期HPを100と仮定
+        [SerializeField] private float hp;
 
         [SerializeField]GameObject clearUI;
 
@@ -75,11 +83,21 @@ namespace kurukuru
         void Start()
         {
             PanelLoading();
-            GridInit();
+            GridInit(); 
+            maxHp=hp;
         }
 
         void Update()
         {    
+            hp -= Time.deltaTime * 10f; // 10の速度でHPを減少させる
+            hp = Mathf.Max(0, hp); // HPが0未満にならないように制約をかける
+
+            // HPバーを更新
+            hpBarImage.fillAmount = hp / 100f; // HPが0から100の範囲にある場合
+
+            //hpBarImage.fillAmount=Mathf.Lerp(hpBarImage.fillAmount,0,Time.deltaTime);
+
+
             if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && (GetClickObj()) && (!isRotate))
             {
                 // 回転計算の初期化
@@ -278,7 +296,7 @@ namespace kurukuru
                     float tileScaleY=(5f/(float)mapSizeY);
 
                     //生成位置
-                    Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -2f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
+                    Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -3f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
                     
                     //生成する座標をtilePosListに保存
                     tilePosList[row][col] = posTemp;
