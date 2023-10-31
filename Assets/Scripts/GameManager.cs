@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 
 namespace kurukuru
@@ -18,14 +19,18 @@ namespace kurukuru
 
         [SerializeField] private List<PanelPrefab> panelPrefabList=new List<PanelPrefab>();
 
-
         //ta
         [SerializeField]private GameObject hpBar;
-        [SerializeField]private Image hpBarImage;
-        [SerializeField] private float maxHp = 100f; // 例として初期HPを100と仮定
-        [SerializeField] private float hp;
+        [SerializeField]private Image playerHpBarImage;
+        [SerializeField]private Image enemyHpBarImage;
+        [SerializeField] private float playerMaxHp; 
+        private float playerNowHp;
+        [SerializeField] private float enemyMaxHp; 
+        private float enemyNowHp;
 
         [SerializeField]GameObject clearUI;
+        [SerializeField]GameObject gameOverUI;
+        [SerializeField]GameObject pauseUI;
 
         private List<bool> clearFlag=new List<bool>();
 
@@ -45,6 +50,7 @@ namespace kurukuru
         private bool allColorCorrect = false;
         int separateCount = 0;  // パズル間の管理
 
+        private GameState gameState;
 
 
         Vector2[] goalPos = // ゴールの位置          
@@ -53,10 +59,6 @@ namespace kurukuru
             new Vector2(-1, -1),    // GREEN
             new Vector2(-1, -1),    // BLUE
         };
-        
-        
-        //private string path = "Assets/StageDate/test02.csv";    // 1 Colors
-        private string path = "Assets/StageDate/test.csv";      // 2 Colors
 
         // パネルの構造体
         public struct Panel
@@ -80,22 +82,65 @@ namespace kurukuru
             BLUE = 2,
         }
 
+        enum GameState
+        {
+            Play,
+            Pause,
+            GameClear,
+            GameOver
+        }
+
         void Start()
         {
             PanelLoading();
-            GridInit(); 
-            maxHp=hp;
+            //PanelLoading("test02");
+            GridInit();
+            gameState=GameState.Play; 
+            enemyNowHp=enemyMaxHp;
+            playerNowHp=playerMaxHp;
         }
 
         void Update()
-        {    
-            hp -= Time.deltaTime * 10f; // 10の速度でHPを減少させる
-            hp = Mathf.Max(0, hp); // HPが0未満にならないように制約をかける
+        {
+            switch (gameState)
+            {
+                case GameState.Play:
+                    // プレイ中の処理を実行
+                    PlayUpdate();
+                    break;
+
+                case GameState.Pause:
+                    // ポーズ中の処理を実行
+                    PauseUpdate();
+                    break;
+
+                case GameState.GameClear:
+                    // ゲームクリア時の処理を実行
+                    GameClearUpdate();
+                    break;
+
+                case GameState.GameOver:
+                    // ゲームオーバー時の処理を実行
+                    GameOverUpdate();
+                    break;
+
+                default:
+                    // 未知の状態に対する処理を実行
+                    break;
+            }
+        }
+
+        void PlayUpdate()
+        {
+            playerNowHp -= Time.deltaTime * 1f; // 10の速度でHPを減少させる
+            playerNowHp = Mathf.Max(0, playerNowHp); // HPが0未満にならないように制約をかける
 
             // HPバーを更新
-            hpBarImage.fillAmount = hp / 100f; // HPが0から100の範囲にある場合
+            playerHpBarImage.fillAmount = playerNowHp / 100f; // HPが0から100の範囲にある場合
 
-            //hpBarImage.fillAmount=Mathf.Lerp(hpBarImage.fillAmount,0,Time.deltaTime);
+            enemyHpBarImage.fillAmount=Mathf.Lerp(enemyHpBarImage.fillAmount,enemyNowHp/enemyMaxHp,Time.deltaTime*10f);
+            if(enemyNowHp<=0)gameState=GameState.GameClear;
+            if(playerNowHp<=0)gameState=GameState.GameOver;
 
 
             if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && (GetClickObj()) && (!isRotate))
@@ -150,8 +195,24 @@ namespace kurukuru
                 }
                 else separateCount++;
             }
-
         }
+
+        void GameClearUpdate()
+        {
+            clearUI.SetActive(true);
+        }
+
+        void GameOverUpdate()
+        {
+            gameOverUI.SetActive(true);
+        }
+
+        void PauseUpdate()
+        {
+            pauseUI.SetActive(true);
+        }
+
+
 
         void PanelLoading()
         {
@@ -169,8 +230,6 @@ namespace kurukuru
                 {
                     // CSV ファイルの中身を取得
                     string csvText = randomCSV.text;
-
-
 
                     // 例: CSV テキストを改行で分割して行ごとに処理
                     string[] lines = csvText.Split('\n');
@@ -222,14 +281,78 @@ namespace kurukuru
             mapSizeX = panelList[0].Count;
             mapSizeY = panelList.Count;
         }
+        
+        // Self Select File
+        void PanelLoading(string CSVName)
+        {
+            try
+            {
+                // フォルダ内のCSVファイルのパスを取得
+                string csvPath = "Assets/Resources/StageData/" + CSVName + ".csv";
+                List<string[]> data = new List<string[]>();
+                // ファイルの全体を読み込み、各行をリストに格納
+                using (StreamReader reader = new StreamReader(csvPath))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        string[] elements = line.Split(','); // カンマで要素を分割
+                        data.Add(elements);
+                    }
+                }
+                int listCounter = 0;    // 行をカウント
+                foreach (string[] elements in data)
+                {
+                    panelList.Add(new List<Panel>());
+                    int elementCounter = 0; //要素数をカウント（奇数番目、偶数番目を識別）
+                    string tempColor = "";  // 色
+                    int tempNumber = 0;     // 数字
+                    foreach (string element in elements)
+                    {
+                        if (elementCounter % 2 == 0) // 偶数番目（csvの奇数番目）は色
+                        {
+                            tempColor = element;
+                        }
+                        else // 奇数番目（csvの偶数番目）は数字
+                        {
+                            if (int.TryParse(element, out tempNumber))
+                            {
+                                panelList[listCounter].Add(new Panel { col = tempColor, num = tempNumber });
+                                //Debug.Log("読み込み：　" + tempColor + ", " + tempNumber);
+                            }
+                            else
+                            {
+                                Debug.Log("読み込み失敗：　" + listCounter + "," + elementCounter / 2 + "番目");
+                            }
+                        }
+                        elementCounter++;
+                    }
+                    listCounter++;
+                    //Debug.Log("------"); // 行の終わりに区切りを表示
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("CSV読み込みエラー: " + e.Message);
+            }
+            mapSizeX = panelList[0].Count;
+            mapSizeY = panelList.Count;
+        }
 
 
         void GridInit()
         {   
+            // 流量計生成用の仮リスト
+            List<Vector2> tmpRedList = new List<Vector2>();
+            List<Vector2> tmpGreenList = new List<Vector2>();
+            List<Vector2> tmpBlueList = new List<Vector2>();
+
             //配列の初期化
             for(int i=0;i<3;i++)
             {
                 flowmeterCheck.Add(true);
+
+                clearFlag.Add(false);
             }
 
             //2次元配列の初期化
@@ -253,19 +376,17 @@ namespace kurukuru
                 {
                     // panelList の内容を gridState に引き継ぎ
                     gridState[r][c] = panelList[r][c];
-                    
-                    //流量計があるか確認
-                    if(gridState[r][c].num==15||gridState[r][c].num==16)
+
+                    // Kaneki
+                    // 流量計になり得る場所をリストに保管
+                    if ((gridState[r][c].num == 1) || (gridState[r][c].num == 2))
                     {
-                        if(gridState[r][c].col=="red")flowmeterCheck[0]=false;
-                        else if (gridState[r][c].col == "green")flowmeterCheck[1]=false;
-                        else if (gridState[r][c].col == "blue")flowmeterCheck[2]=false;
+                        if      (gridState[r][c].col == "red")     tmpRedList.Add((new Vector2(c, r)));
+                        else if (gridState[r][c].col == "green") tmpGreenList.Add((new Vector2(c, r)));
+                        else if (gridState[r][c].col == "blue")   tmpBlueList.Add((new Vector2(c, r)));
                     }
-
-                    //Debug.Log("gridState[" + r + "][" + c + "].col = " + gridState[r][c].col);
-
                     // ゴール位置の記憶
-                    if (gridState[r][c].num == 11||gridState[r][c].num == 12||gridState[r][c].num == 13||gridState[r][c].num == 14)
+                    else if (gridState[r][c].num == 11||gridState[r][c].num == 12||gridState[r][c].num == 13||gridState[r][c].num == 14)
                     {
                         if      (gridState[r][c].col == "red")    goalPos[(int)COLOR.RED]   = new Vector2(c, r);
                         else if (gridState[r][c].col == "green")  goalPos[(int)COLOR.GREEN] = new Vector2(c, r);
@@ -274,18 +395,65 @@ namespace kurukuru
                 }
             }
 
+            // 流量計に進化させる
+            // RED
+            if (tmpRedList.Any())
+            {
+                Vector2 redFlowMeter = tmpRedList[UnityEngine.Random.Range(0, tmpRedList.Count)];
+                var tmp = gridState[(int)redFlowMeter.y][(int)redFlowMeter.x];
+                tmp.num += 14;
+                gridState[(int)redFlowMeter.y][(int)redFlowMeter.x] = tmp;
+                flowmeterCheck[(int)COLOR.RED] = false;
+
+            }
+            // GREEN
+            if (tmpGreenList.Any())
+            {
+                Vector2 greenFlowMeter = tmpGreenList[UnityEngine.Random.Range(0, tmpGreenList.Count)];
+                var tmp = gridState[(int)greenFlowMeter.y][(int)greenFlowMeter.x];
+                tmp.num += 14;
+                gridState[(int)greenFlowMeter.y][(int)greenFlowMeter.x] = tmp;
+                flowmeterCheck[(int)COLOR.GREEN] = false;
+            }
+            // BLUE
+            if (tmpBlueList.Any())
+            {
+                Vector2 blueFlowMeter = tmpBlueList[UnityEngine.Random.Range(0, tmpBlueList.Count)];
+                var tmp = gridState[(int)blueFlowMeter.y][(int)blueFlowMeter.x];
+                tmp.num += 14;
+                gridState[(int)blueFlowMeter.y][(int)blueFlowMeter.x] = tmp;
+                flowmeterCheck[(int)COLOR.BLUE] = false;
+            }
+
+
+
 
             // ゴール位置の Debug 表示
+            Debug.Log("goalPos[RED]   : " + goalPos[0]);
+            Debug.Log("goalPos[GREEN] : " + goalPos[1]);
+            Debug.Log("goalPos[BLUE]  : " + goalPos[2]);
+            // clearFlag のセット
             Vector2 invalid = new Vector2(-1, -1);
-            if (goalPos[(int)COLOR.RED]   == invalid) clearFlag.Add(true);
-            else clearFlag.Add(false);
-            if (goalPos[(int)COLOR.GREEN] == invalid) clearFlag.Add(true);
-            else clearFlag.Add(false);
-            if (goalPos[(int)COLOR.BLUE]  == invalid) clearFlag.Add(true);
-            else clearFlag.Add(false);
+            if (goalPos[(int)COLOR.RED]   == invalid) clearFlag[(int)COLOR.RED] = true;
+            else clearFlag[(int)COLOR.RED] = false;
+            if (goalPos[(int)COLOR.GREEN] == invalid) clearFlag[(int)COLOR.GREEN] = true;
+            else clearFlag[(int)COLOR.GREEN] = false;
+            if (goalPos[(int)COLOR.BLUE]  == invalid) clearFlag[(int)COLOR.BLUE] = true;
+            else clearFlag[(int)COLOR.BLUE] = false;
 
             // ダミーパネルの生成 & パネルのランダム回転
-            SetGridRandom();
+            while (true)
+            {
+                // ランダム化
+                SetGridRandom();
+
+                // 始めからゴールされていないようにする
+                if ( !(
+                    (!clearFlag[(int)COLOR.RED]   && CheckPazzleCorrect("red"))   ||
+                    (!clearFlag[(int)COLOR.GREEN] && CheckPazzleCorrect("green")) ||
+                    (!clearFlag[(int)COLOR.BLUE]  && CheckPazzleCorrect("blue"))    ))
+                    break;
+            }
             
             for (int row = 0; row < mapSizeX; row++)
             {
@@ -296,7 +464,7 @@ namespace kurukuru
                     float tileScaleY=(5f/(float)mapSizeY);
 
                     //生成位置
-                    Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -3f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
+                    Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -4.5f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
                     
                     //生成する座標をtilePosListに保存
                     tilePosList[row][col] = posTemp;
@@ -697,7 +865,9 @@ namespace kurukuru
         void ResetPazzle()
         {
             // Add score
-            score += 100;
+            //score += 100;
+            enemyNowHp-=10;
+            if(enemyNowHp<0)enemyNowHp=0;
 
             // Clear Lists
             for (int i = 0; i < mapSizeX; i++)
@@ -741,6 +911,17 @@ namespace kurukuru
             // Clear Correct Data
             allColorCorrect = false;
             separateCount = 0;
+        }
+    
+        public void SetPause()
+        {
+            if(gameState==GameState.Pause)
+            {
+                pauseUI.SetActive(false);
+                gameState=GameState.Play;
+            }
+            
+            else gameState=GameState.Pause;
         }
     }
 
