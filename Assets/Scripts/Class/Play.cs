@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Play : MonoBehaviour
 {
+    [SerializeField]MapData mapData;
     private List<List<GameObject>> grid = new List<List<GameObject>>();
     private List<List<Panel>> gridState = new List<List<Panel>>();          
     private List<List<Vector3>> tilePosList = new List<List<Vector3>>();
@@ -102,8 +103,6 @@ public class Play : MonoBehaviour
         {
             PlayEnd();
             gameManager.ChangeGameState(GameManager.GameState.GameClear);
-            
-            
         }
         
         if(playerNowHp<=0)gameManager.ChangeGameState(GameManager.GameState.GameOver);

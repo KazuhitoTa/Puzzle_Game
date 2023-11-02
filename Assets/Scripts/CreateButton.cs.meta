@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1b6a4127c67a1c5439d99a6060af7490
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - buttonPrefab: {fileID: 4634598929036116569, guid: d442df7411c11564f9e7cfba021ab1ab, type: 3}
+  - canvasTransform: {instanceID: 0}
+  - textMeshProFont: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

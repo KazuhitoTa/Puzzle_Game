@@ -2237,6 +2237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eee0b58147e034449fb8a20be20ca89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapData: {fileID: 11400000, guid: 92ac4493a7ec55c4ba63b759126499ad, type: 2}
   panelPrefabList:
   - colorList:
     - {fileID: 5518154703450357419, guid: 89ea6b95535617e449a89f0d0d198d07, type: 3}
