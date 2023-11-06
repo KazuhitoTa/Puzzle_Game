@@ -10,16 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 382694f81f034b045a7d0efdadba2bce, type: 3}
-  m_Name: EnemyData
+  m_Name: MapData
   m_EditorClassIdentifier: 
-  enemies:
+  Maps:
   - enemyPrefab: {fileID: 0}
-    name: 
-    information: "\u8D85\u5F37\u3044\u3088"
-    hP: 0
-    atk: 0
+    playerPrefab: {fileID: 0}
+    backGround: {fileID: 0}
+    enemyHP: 0
+    enemyAtk: 0
   - enemyPrefab: {fileID: 0}
-    name: 
-    information: "\u8D85\u5F31\u3044\u3088"
-    hP: 0
-    atk: 0
+    playerPrefab: {fileID: 0}
+    backGround: {fileID: 0}
+    enemyHP: 0
+    enemyAtk: 0
+  - enemyPrefab: {fileID: 0}
+    playerPrefab: {fileID: 0}
+    backGround: {fileID: 0}
+    enemyHP: 0
+    enemyAtk: 0

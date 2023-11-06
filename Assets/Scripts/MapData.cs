@@ -15,7 +15,6 @@ public class MapData : ScriptableObject
         [SerializeField]private GameObject enemyPrefab;
         [SerializeField]private GameObject playerPrefab;
         [SerializeField]private Image backGround;
-        [SerializeField]private List<String> csvPath=new List<string>();
         [SerializeField]private int enemyHP;
         [SerializeField] private int enemyAtk;
 
@@ -23,7 +22,6 @@ public class MapData : ScriptableObject
         public GameObject EnemyPrefab{get=>enemyPrefab;}
         public GameObject PlayerPrefab{get=>playerPrefab;}
         public Image BackGround{get=>backGround;}
-        public List<String> CsvPath{get=>csvPath;}
         public int EnemyHP{get=>enemyHP;}
         public int EnemyAtk{get=>enemyAtk;}
     }

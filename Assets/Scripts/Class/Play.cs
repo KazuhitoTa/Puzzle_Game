@@ -46,8 +46,6 @@ public class Play : MonoBehaviour
 
     [SerializeField]GameManager gameManager;
 
-    [SerializeField]GameObject gomi;
-
     TextAsset[] csvFiles;
 
     Vector2[] goalPos = // ゴールの位置          
@@ -81,7 +79,7 @@ public class Play : MonoBehaviour
 
     public void PlayStart()
     {
-        csvFiles = Resources.LoadAll<TextAsset>("StageData");
+        csvFiles = Resources.LoadAll<TextAsset>(GetStageFilePath());
         PanelLoading();
         //PanelLoading("test09");
         GridInit();
@@ -91,11 +89,11 @@ public class Play : MonoBehaviour
 
     public void PlayUpdate()
     {
-        // playerNowHp -= Time.deltaTime * 1f; // 10の速度でHPを減少させる
-        // playerNowHp = Mathf.Max(0, playerNowHp); // HPが0未満にならないように制約をかける
+        playerNowHp -= Time.deltaTime * 1f; // 10の速度でHPを減少させる
+        playerNowHp = Mathf.Max(0, playerNowHp); // HPが0未満にならないように制約をかける
 
-        // // HPバーを更新
-        // playerHpBarImage.fillAmount = playerNowHp / 100f; // HPが0から100の範囲にある場合
+        // HPバーを更新
+        playerHpBarImage.fillAmount = playerNowHp / 100f; // HPが0から100の範囲にある場合
 
         enemyHpBarImage.fillAmount=Mathf.Lerp(enemyHpBarImage.fillAmount,enemyNowHp/enemyMaxHp,Time.deltaTime*10f);
 
@@ -107,14 +105,23 @@ public class Play : MonoBehaviour
         
         if(playerNowHp<=0)gameManager.ChangeGameState(GameManager.GameState.GameOver);
 
-        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && (GetClickObj()) && (!isRotate))
+        if ((Input.touchCount > 0 || Input.GetMouseButtonDown(0)) && GetClickObj() && !isRotate)
         {
-            // 回転計算の初期化
-            isRotate = true;
-            clickObject = GetClickObj();
-            startAngleZ = clickObject.transform.localEulerAngles.z;
-            //Debug.Log("startAngleZ : " + startAngleZ);
+            Touch touch;
+            if (Input.touchCount > 0)
+                touch = Input.GetTouch(0);
+            else
+                touch = new Touch();
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                isRotate = true;
+                clickObject = GetClickObj();
+                startAngleZ = clickObject.transform.localEulerAngles.z;
+                //Debug.Log("startAngleZ : " + startAngleZ);
+            }
         }
+
 
         if (isRotate)
         {
@@ -168,6 +175,11 @@ public class Play : MonoBehaviour
         {
             item.SetActive(false);
         }
+    }
+
+    string GetStageFilePath()
+    {
+        return "StageData/StageData"+ButtonManager.stageNumber.ToString();
     }
 
     void PanelLoading()
@@ -297,6 +309,8 @@ public class Play : MonoBehaviour
 
         void GridInit()
         {   
+            UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+
             // 流量計生成用の仮リスト
             List<Vector2> tmpRedList = new List<Vector2>();
             List<Vector2> tmpGreenList = new List<Vector2>();

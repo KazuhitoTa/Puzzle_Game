@@ -35,7 +35,6 @@ namespace kurukuru
                 startCheck.Add(false);
             }
             play.PlayStart();
-            //gameState=GameState.Play;
         }
 
         void Update()
@@ -85,6 +84,15 @@ namespace kurukuru
                 if(i==StateNum)startCheck[i]=true;
                 else startCheck[i]=false;
             }
+        }
+
+        public void GoStageSelect()
+        {
+            SceneManager.LoadScene("StageSelect");
+        }
+        public void GoGame()
+        {
+            SceneManager.LoadScene("kurukuruGame");
         }
 
     }

@@ -14,8 +14,7 @@ public class AllManager : MonoBehaviour
     {
         Title,
         StageSelect,
-        Puzzle
-        
+        Puzzle 
     }
 
     void Awake()

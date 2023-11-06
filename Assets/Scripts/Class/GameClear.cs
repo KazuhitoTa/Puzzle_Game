@@ -8,15 +8,25 @@ using UnityEngine;
 public class GameClear : MonoBehaviour
 {
     [SerializeField]List<GameObject> gameObjects=new List<GameObject>();
+    private string fileName; // ファイル名
+    private string filePath; // ファイルパス
 
-    string filePath = "Assets/Resources/SaveData/SaveData.csv";   // 書き込み先ファイルのパス
+    void Awake()
+    {
+        fileName = "SaveData.csv";
+        filePath = System.IO.Path.Combine(Application.persistentDataPath, fileName);
+    }
+
     public void GameClearStart()
     {
+        Debug.Log(filePath);
         Debug.Log("start");
         foreach (var item in gameObjects)
         {
             item.SetActive(true);
         }
+
+        Debug.Log(ButtonManager.stageNumber);
 
         ChangeStageState(ButtonManager.stageNumber);
     }
