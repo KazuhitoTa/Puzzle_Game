@@ -46,7 +46,8 @@ public class Play : MonoBehaviour
 
     [SerializeField]GameManager gameManager;
 
-    TextAsset[] csvFiles;
+    List<TextAsset> csvFiles=new List<TextAsset>();
+    List<TextAsset> csvFilesHoge=new List<TextAsset>();
 
     Vector2[] goalPos = // ゴールの位置          
     {
@@ -79,7 +80,7 @@ public class Play : MonoBehaviour
 
     public void PlayStart()
     {
-        csvFiles = Resources.LoadAll<TextAsset>(GetStageFilePath());
+        csvFiles = new List<TextAsset>( Resources.LoadAll<TextAsset>(GetStageFilePath()));
         PanelLoading();
         //PanelLoading("test09");
         GridInit();
@@ -184,11 +185,17 @@ public class Play : MonoBehaviour
 
     void PanelLoading()
         {
-            if (csvFiles != null && csvFiles.Length > 0)
+            if (csvFiles != null && csvFiles.Count > 0)
             {
                 // ランダムにファイルを選択
-                int randomIndex = UnityEngine.Random.Range(0, csvFiles.Length);
+                int randomIndex = UnityEngine.Random.Range(0, csvFiles.Count);
                 TextAsset randomCSV = csvFiles[randomIndex];
+
+                //ta
+                csvFilesHoge.Add(csvFiles[randomIndex]);
+                csvFiles.RemoveAt(randomIndex);
+
+
                 //Debug.Log("csvFiles.Length : " + csvFiles.Length);
                 Debug.Log("randomIndex : " + randomIndex);
                 int listCounter = 0;    // 行をカウント
