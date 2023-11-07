@@ -8,7 +8,7 @@ public class AllManager : MonoBehaviour
 {
     public static AllManager instance;
 
-    private StageState stageState;
+    //private StageState stageState;
 
     enum StageState
     {
@@ -25,7 +25,7 @@ public class AllManager : MonoBehaviour
    void Start()
    {
         DontDestroyOnLoad(gameObject);
-        stageState=StageState.Title;
+        //stageState=StageState.Title;
    }
 
     void CheckInstance()
@@ -43,6 +43,6 @@ public class AllManager : MonoBehaviour
     public void OnClick()
     {
         SceneManager.LoadScene("StageSelect");
-        stageState=StageState.StageSelect;
+        //stageState=StageState.StageSelect;
     }
 }  

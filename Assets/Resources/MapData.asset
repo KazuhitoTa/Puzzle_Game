@@ -16,15 +16,21 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 0}
     playerPrefab: {fileID: 0}
     backGround: {fileID: 0}
-    enemyHP: 0
+    enemyHP: 10
     enemyAtk: 0
+    time: 0
+    enemyStates: 0000000001000000
   - enemyPrefab: {fileID: 0}
     playerPrefab: {fileID: 0}
     backGround: {fileID: 0}
-    enemyHP: 0
+    enemyHP: 30
     enemyAtk: 0
+    time: 0
+    enemyStates: 
   - enemyPrefab: {fileID: 0}
     playerPrefab: {fileID: 0}
     backGround: {fileID: 0}
-    enemyHP: 0
+    enemyHP: 50
     enemyAtk: 0
+    time: 0
+    enemyStates: 

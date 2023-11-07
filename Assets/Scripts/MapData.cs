@@ -17,6 +17,9 @@ public class MapData : ScriptableObject
         [SerializeField]private Image backGround;
         [SerializeField]private int enemyHP;
         [SerializeField] private int enemyAtk;
+        [SerializeField]private int time;
+        public List<enemyState> enemyStates=new List<enemyState>();
+        
 
 
         public GameObject EnemyPrefab{get=>enemyPrefab;}
@@ -24,6 +27,19 @@ public class MapData : ScriptableObject
         public Image BackGround{get=>backGround;}
         public int EnemyHP{get=>enemyHP;}
         public int EnemyAtk{get=>enemyAtk;}
+        public int Time{get=>time;}
+
+        public enum enemyState
+        {
+            atk,
+            blind,
+            poison
+        }
+
+        public void Action(enemyState temp)
+        {
+            
+        }
     }
     
 }
