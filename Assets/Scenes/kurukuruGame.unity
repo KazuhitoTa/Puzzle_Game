@@ -3069,7 +3069,7 @@ MonoBehaviour:
   - colorList:
     - {fileID: 5518154703450357419, guid: a526a1c5fcb37634cb1fe73b0d9dfb13, type: 3}
     - {fileID: 5518154703450357419, guid: bebbb856b932832479e545d27a801c7e, type: 3}
-    - {fileID: 2483918410507156177, guid: befcda3b2dfe9a043859766e8a056ae8, type: 3}
+    - {fileID: 5518154703450357419, guid: 2c097f50796ead04aa7c8989dd19b0c7, type: 3}
     - {fileID: 5645441788042116929, guid: acd4d1d5e749100429ea92fcc518dbb9, type: 3}
     - {fileID: 5601932207248786493, guid: 1668b6296e4914549aedb50e1b3c878c, type: 3}
     - {fileID: 8602086375617617229, guid: 24d42516ded686d4aa81eb36edf111d0, type: 3}
