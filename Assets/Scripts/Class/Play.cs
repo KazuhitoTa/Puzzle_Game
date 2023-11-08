@@ -67,6 +67,7 @@ public class Play : MonoBehaviour
     bool firstBool=false;
 
     [SerializeField] Image leadyTimeBar;
+    [SerializeField] GameObject untObj;
 
     Vector2[] goalPos = // ゴールの位置          
     {
@@ -951,6 +952,37 @@ public class Play : MonoBehaviour
         StartCoroutine(DestroyTileAfterDelay(cloud, temp));
     }
 
+    public void UntPanel(int count)
+    {
+        List<(int,int)> pos=new List<(int, int)>();
+
+        pos =PosRand(count);
+
+        List<BoxCollider2D> bind=new List<BoxCollider2D>();
+        
+        float temp=5.0f;
+
+        untObj.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
+        
+        List<GameObject> cloud=new List<GameObject>();
+        
+        pos =PosRand(count);
+
+        foreach (var item in pos)
+        {
+            var tmpCollider=grid[item.Item1][item.Item2].GetComponent<BoxCollider2D>();
+            bind.Add(tmpCollider);
+            if(tmpCollider!=null)tmpCollider.enabled=false;
+        }
+
+        foreach (var item in pos)
+        {
+            cloud.Add(Instantiate(untObj, tilePosList[item.Item1][item.Item2], Quaternion.identity));
+        }
+        
+        StartCoroutine(EnableTileAfterDelay(bind, temp,cloud));
+    }
+
     List<(int,int)> PosRand(int count)
     {
         List<(int,int)> temp=new List<(int, int)>();
@@ -970,24 +1002,6 @@ public class Play : MonoBehaviour
         return temp;
     }
 
-    public void UntPanel(int count)
-    {
-        List<(int,int)> pos=new List<(int, int)>();
-
-        pos =PosRand(count);
-
-        List<BoxCollider2D> bind=new List<BoxCollider2D>();
-        
-        float temp=5.0f;
-        foreach (var item in pos)
-        {
-            var tmpCollider=grid[item.Item1][item.Item2].GetComponent<BoxCollider2D>();
-            bind.Add(tmpCollider);
-            if(tmpCollider!=null)tmpCollider.enabled=false;
-        }
-        
-        StartCoroutine(EnableTileAfterDelay(bind, temp));
-    }
 
     IEnumerator DestroyTileAfterDelay(List<GameObject> tile, float delay)
     {
@@ -998,12 +1012,16 @@ public class Play : MonoBehaviour
         }
         
     }
-    IEnumerator EnableTileAfterDelay(List<BoxCollider2D> collider2D, float delay)
+    IEnumerator EnableTileAfterDelay(List<BoxCollider2D> collider2D, float delay,List<GameObject> tile)
     {
         yield return new WaitForSeconds(delay);
         foreach (var item in collider2D)
         {
             item.enabled = true;
+        }
+        foreach (var item in tile)
+        {
+            Destroy(item);
         }
         
     }

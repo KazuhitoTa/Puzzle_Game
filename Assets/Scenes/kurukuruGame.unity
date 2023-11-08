@@ -3528,6 +3528,7 @@ MonoBehaviour:
   gameManager: {fileID: 1671590215}
   invPanelPrefab: {fileID: 2057804465302517532, guid: 72c50a53acf998649b63576f98374b90, type: 3}
   leadyTimeBar: {fileID: 1961743480}
+  untObj: {fileID: 2057804465302517532, guid: 751bab3eec309544dba792bb19b21a22, type: 3}
 --- !u!114 &1671590218
 MonoBehaviour:
   m_ObjectHideFlags: 0

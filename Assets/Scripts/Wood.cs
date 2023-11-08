@@ -16,7 +16,7 @@ public class Wood : Enemy
 		//unttime = 3;
 		ct = 5.0f;
 		rt=5.0f;
-		SetActPattern(60, 25, 15);
+		SetActPattern(20, 25, 55);
 
 		StartCoroutine(ActRoutine());  
     }
