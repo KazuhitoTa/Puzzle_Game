@@ -4,17 +4,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using kurukuru;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class Play : MonoBehaviour
 {
+    [SerializeField]List<Color> leadyTimeBarColor=new List<Color>();
     private List<List<GameObject>> grid = new List<List<GameObject>>();
     private List<List<Panel>> gridState = new List<List<Panel>>();          
     private List<List<Vector3>> tilePosList = new List<List<Vector3>>();
     private List<List<Panel>> panelList = new List<List<Panel>>();
 
     [SerializeField] private List<PanelPrefab> panelPrefabList=new List<PanelPrefab>();
+
+    [SerializeField]private List<GameObject> buttonTempList=new List<GameObject>();
 
     [SerializeField]private GameObject hpBar;
     [SerializeField]private Image playerHpBarImage;
@@ -54,6 +59,15 @@ public class Play : MonoBehaviour
     float tileScaleX;
     float tileScaleY;
 
+    int buttonNum=-1;
+
+    float startTime=0;
+    float countTime;
+
+    bool firstBool=false;
+
+    [SerializeField] Image leadyTimeBar;
+
     Vector2[] goalPos = // ゴールの位置          
     {
         new Vector2(-1, -1),    // RED
@@ -91,12 +105,21 @@ public class Play : MonoBehaviour
         GridInit();
         enemyNowHp=enemyMaxHp;
         playerNowHp=playerMaxHp;
-        Invisible((2,1));
-        UntPanel((3,3));
+    }
+
+    public void PlayEntry()
+    {
+        startTime=Time.time-startTime;
     }
 
     public void PlayUpdate()
     {
+        if(Time.time-startTime<countTime)
+        {
+            leadyTimeBar.fillAmount=(countTime-(Time.time-startTime))/countTime;
+            if(leadyTimeBar.fillAmount<0.01f)leadyTimeBar.fillAmount=0;
+        }
+
         playerNowHp -= Time.deltaTime * 1f; // 10の速度でHPを減少させる
         playerNowHp = Mathf.Max(0, playerNowHp); // HPが0未満にならないように制約をかける
 
@@ -178,7 +201,6 @@ public class Play : MonoBehaviour
 
     public void PlayEnd()
     {
-        Debug.Log("end");
         foreach (var item in clearObjects)
         {
             item.SetActive(false);
@@ -196,7 +218,6 @@ public class Play : MonoBehaviour
         {
             if(csvFilesHoge.Count==0)
             {
-                Debug.Log("CSVなくなったで！");
                 csvFilesHoge.AddRange(csvFiles);
             }
             // ランダムにファイルを選択
@@ -208,7 +229,7 @@ public class Play : MonoBehaviour
 
 
             //Debug.Log("csvFiles.Length : " + csvFiles.Length);
-            Debug.Log("randomIndex : " + randomIndex);
+            //Debug.Log("randomIndex : " + randomIndex);
             int listCounter = 0;    // 行をカウント
             //Debug.Log(randomCSV);
             if (randomCSV != null)
@@ -416,9 +437,9 @@ public class Play : MonoBehaviour
 
 
         // ゴール位置の Debug 表示
-        Debug.Log("goalPos[RED]   : " + goalPos[0]);
-        Debug.Log("goalPos[GREEN] : " + goalPos[1]);
-        Debug.Log("goalPos[BLUE]  : " + goalPos[2]);
+        // Debug.Log("goalPos[RED]   : " + goalPos[0]);
+        // Debug.Log("goalPos[GREEN] : " + goalPos[1]);
+        // Debug.Log("goalPos[BLUE]  : " + goalPos[2]);
         // clearFlag のセット
         Vector2 invalid = new Vector2(-1, -1);
         if (goalPos[(int)COLOR.RED]   == invalid) clearFlag[(int)COLOR.RED] = true;
@@ -854,6 +875,7 @@ public class Play : MonoBehaviour
     // パズルをクリアした時にリセット
     void ResetPazzle()
     {
+        StopAllCoroutines();
         // Add score
         //score += 100;
         playerNowHp+=10;
@@ -904,36 +926,125 @@ public class Play : MonoBehaviour
         //separateCount = 0;
     }
 
-    void Invisible((int, int) pos)
+    public void DecTime(float timeTemp)
     {
-        float temp=3.0f;
-        invPanelPrefab.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
-        GameObject tile = Instantiate(invPanelPrefab, tilePosList[pos.Item1][pos.Item2], Quaternion.identity);
-
-        StartCoroutine(DestroyTileAfterDelay(tile, temp));
+        playerNowHp-=timeTemp;
     }
 
-    void UntPanel((int, int) pos)
+    public void InvPanel(int count)
     {
-        float temp=20.0f;
-        var tmpCollider=grid[pos.Item1][pos.Item2].GetComponent<BoxCollider2D>();
-        tmpCollider.enabled=false;
+        List<(int,int)> pos=new List<(int, int)>();
         
-        StartCoroutine(EnableTileAfterDelay(tmpCollider, temp));
+        
+        float temp=5.0f;
+        invPanelPrefab.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
+        
+        List<GameObject> cloud=new List<GameObject>();
+        
+        pos =PosRand(count);
+        
+        foreach (var item in pos)
+        {
+            cloud.Add(Instantiate(invPanelPrefab, tilePosList[item.Item1][item.Item2], Quaternion.identity));
+        }
+
+        StartCoroutine(DestroyTileAfterDelay(cloud, temp));
     }
 
-    IEnumerator DestroyTileAfterDelay(GameObject tile, float delay)
+    List<(int,int)> PosRand(int count)
     {
-        yield return new WaitForSeconds(delay);
-        Destroy(tile);
-    }
-    IEnumerator EnableTileAfterDelay(BoxCollider2D collider2D, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        collider2D.enabled = true;
+        List<(int,int)> temp=new List<(int, int)>();
+
+        while (temp.Count<5)
+        {
+            (int,int) tempNum=(0,0);
+            tempNum.Item1=UnityEngine.Random.Range(0, mapSizeX);
+            tempNum.Item2=UnityEngine.Random.Range(0, mapSizeY);
+            
+            if (!temp.Contains(tempNum) || gridState[tempNum.Item1][tempNum.Item2].num < 7 || gridState[tempNum.Item1][tempNum.Item2].num > 14)
+            {
+                temp.Add(tempNum);
+            }
+
+        }
+        return temp;
     }
 
+    public void UntPanel(int count)
+    {
+        List<(int,int)> pos=new List<(int, int)>();
+
+        pos =PosRand(count);
+
+        List<BoxCollider2D> bind=new List<BoxCollider2D>();
+        
+        float temp=5.0f;
+        foreach (var item in pos)
+        {
+            var tmpCollider=grid[item.Item1][item.Item2].GetComponent<BoxCollider2D>();
+            bind.Add(tmpCollider);
+            if(tmpCollider!=null)tmpCollider.enabled=false;
+        }
+        
+        StartCoroutine(EnableTileAfterDelay(bind, temp));
+    }
+
+    IEnumerator DestroyTileAfterDelay(List<GameObject> tile, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        foreach (var item in tile)
+        {
+            Destroy(item);
+        }
+        
+    }
+    IEnumerator EnableTileAfterDelay(List<BoxCollider2D> collider2D, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        foreach (var item in collider2D)
+        {
+            item.enabled = true;
+        }
+        
+    }
+
+    public void ActReady(int color,float time)
+    {
+        startTime=Time.time;
+        countTime=time;
+        leadyTimeBar.color=leadyTimeBarColor[color];
+    }
 
     
+
+    public void button1()
+    {
+        buttonNum=0;
+        for (int i = 0; i < buttonTempList.Count; i++)
+        {
+            buttonTempList[i].SetActive(i == buttonNum);
+        }
+    }
+    public void button2()
+    {
+        buttonNum=1;
+        for (int i = 0; i < buttonTempList.Count; i++)
+        {
+            buttonTempList[i].SetActive(i == buttonNum);
+        }
+    }
+    public void button3()
+    {
+        buttonNum=2;
+        for (int i = 0; i < buttonTempList.Count; i++)
+        {
+            buttonTempList[i].SetActive(i == buttonNum);
+        }
+    }
+
+    public int NowButtonNum()
+    {
+        return buttonNum;
+    }
 
 }

@@ -74,6 +74,7 @@ namespace kurukuru
             if (gameStateTemp==GameState.Pause)     pause.PauseStart();
             else if (gameStateTemp==GameState.GameClear) gameClear.GameClearStart();
             else if (gameStateTemp==GameState.GameOver)  gameOver.GameOverStart();
+            else if (gameStateTemp==GameState.Play) play.PlayEntry();
             gameState=gameStateTemp;
         }
 

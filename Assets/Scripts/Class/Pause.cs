@@ -27,6 +27,7 @@ public class Pause :MonoBehaviour
         {
             item.SetActive(false);
         }
+        
     }
 
     public void SetPause()

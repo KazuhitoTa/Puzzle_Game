@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class test : MonoBehaviour
 {
-
     //妥協
     public static int stageNumber;
 
