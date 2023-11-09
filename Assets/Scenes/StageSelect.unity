@@ -349,10 +349,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b6a4127c67a1c5439d99a6060af7490, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonCount: 10
   buttonPrefab: {fileID: 4634598929036116569, guid: d442df7411c11564f9e7cfba021ab1ab, type: 3}
   canvasTransform: {fileID: 394725556}
   textMeshProFont: {fileID: 0}
-  buttonCount: 10
 --- !u!1 &681422989
 GameObject:
   m_ObjectHideFlags: 0

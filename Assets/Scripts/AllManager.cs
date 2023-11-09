@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class AllManager : MonoBehaviour
 {
     public static AllManager instance;
+    [SerializeField]List<Animator> animator=new List<Animator>();
 
     //private StageState stageState;
 
@@ -44,5 +45,14 @@ public class AllManager : MonoBehaviour
     {
         SceneManager.LoadScene("StageSelect");
         //stageState=StageState.StageSelect;
+    }
+
+    public void ochanClick()
+    {
+        animator[0].SetTrigger("Click");
+    }
+    public void valchanClick()
+    {
+        animator[1].SetTrigger("Click");
     }
 }  

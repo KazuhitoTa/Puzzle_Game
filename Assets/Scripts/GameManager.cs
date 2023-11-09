@@ -16,7 +16,7 @@ namespace kurukuru
         [SerializeField]Pause pause;
         [SerializeField]GameClear gameClear;
         [SerializeField]GameOver gameOver;
-        private GameState gameState=GameState.Play;
+        public GameState gameState=GameState.Play;
         private List<bool> startCheck=new List<bool>();
 
 
@@ -94,6 +94,11 @@ namespace kurukuru
         public void GoGame()
         {
             SceneManager.LoadScene("kurukuruGame");
+        }
+
+        public GameManager.GameState GetGameState()
+        {
+            return gameState;
         }
 
     }

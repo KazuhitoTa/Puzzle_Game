@@ -11,6 +11,9 @@ using UnityEngine.UI;
 
 public class Play : MonoBehaviour
 {
+    [SerializeField]MapData mapData;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField]public AudioClip sound1;
     [SerializeField]List<Color> leadyTimeBarColor=new List<Color>();
     private List<List<GameObject>> grid = new List<List<GameObject>>();
     private List<List<Panel>> gridState = new List<List<Panel>>();          
@@ -65,9 +68,12 @@ public class Play : MonoBehaviour
     float countTime;
 
     bool firstBool=false;
+    [SerializeField] GameObject enemyPrefab;
 
     [SerializeField] Image leadyTimeBar;
     [SerializeField] GameObject untObj;
+    List<GameObject> cloud=new List<GameObject>();
+    List<GameObject> unt=new List<GameObject>();
 
     Vector2[] goalPos = // ゴールの位置          
     {
@@ -100,25 +106,30 @@ public class Play : MonoBehaviour
 
     public void PlayStart()
     {
+
         csvFiles = new List<TextAsset>( Resources.LoadAll<TextAsset>(GetStageFilePath()));
         PanelLoading();
         //PanelLoading("test09");
         GridInit();
         enemyNowHp=enemyMaxHp;
         playerNowHp=playerMaxHp;
+        var temp=Instantiate(mapData.Maps[ButtonManager.stageNumber-1].EnemyPrefab,new Vector3(1.3f,2.6f,0),Quaternion.identity);
+        clearObjects.Add(temp);
     }
 
     public void PlayEntry()
     {
         startTime=Time.time-startTime;
+        Debug.Log(startTime);
     }
 
     public void PlayUpdate()
     {
-        if(Time.time-startTime<countTime)
+        if(0<countTime)
         {
-            leadyTimeBar.fillAmount=(countTime-(Time.time-startTime))/countTime;
-            if(leadyTimeBar.fillAmount<0.01f)leadyTimeBar.fillAmount=0;
+            countTime=countTime-Time.deltaTime;
+            leadyTimeBar.fillAmount=countTime/5;
+            Debug.Log(countTime);
         }
 
         playerNowHp -= Time.deltaTime * 1f; // 10の速度でHPを減少させる
@@ -139,6 +150,7 @@ public class Play : MonoBehaviour
 
         if ((Input.touchCount > 0 || Input.GetMouseButtonDown(0)) && GetClickObj() && !isRotate)
         {
+             audioSource.PlayOneShot(sound1);
             Touch touch;
             if (Input.touchCount > 0)
                 touch = Input.GetTouch(0);
@@ -349,12 +361,17 @@ public class Play : MonoBehaviour
 
     void GridInit()
     {   
+
+
         UnityEngine.Random.InitState(DateTime.Now.Millisecond);
 
         // 流量計生成用の仮リスト
         List<Vector2> tmpRedList = new List<Vector2>();
         List<Vector2> tmpGreenList = new List<Vector2>();
         List<Vector2> tmpBlueList = new List<Vector2>();
+        bool redFlowMeterFlg=false;
+        bool greenFlowMeterFlg=false;
+        bool blueFlowMeterFlg=false;
 
         //配列の初期化
         for(int i=0;i<3;i++)
@@ -386,7 +403,6 @@ public class Play : MonoBehaviour
                 // panelList の内容を gridState に引き継ぎ
                 gridState[r][c] = panelList[r][c];
 
-                // Kaneki
                 // 流量計になり得る場所をリストに保管
                 if ((gridState[r][c].num == 1) || (gridState[r][c].num == 2))
                 {
@@ -401,12 +417,20 @@ public class Play : MonoBehaviour
                     else if (gridState[r][c].col == "green")  goalPos[(int)COLOR.GREEN] = new Vector2(c, r);
                     else if (gridState[r][c].col == "blue")   goalPos[(int)COLOR.BLUE]  = new Vector2(c, r);
                 }
+                // 流量計を書いているかどうか確認
+                else if ((gridState[r][c].num == 15) || (gridState[r][c].num == 16))
+                {
+                    if      (gridState[r][c].col == "red")     redFlowMeterFlg=true;
+                    else if (gridState[r][c].col == "green")   greenFlowMeterFlg=true;
+                    else if (gridState[r][c].col == "blue")    blueFlowMeterFlg=true;
+                }
+
             }
         }
 
         // 流量計に進化させる
         // RED
-        if (tmpRedList.Any())
+        if (tmpRedList.Any()&&!redFlowMeterFlg)
         {
             Vector2 redFlowMeter = tmpRedList[UnityEngine.Random.Range(0, tmpRedList.Count)];
             var tmp = gridState[(int)redFlowMeter.y][(int)redFlowMeter.x];
@@ -416,7 +440,7 @@ public class Play : MonoBehaviour
 
         }
         // GREEN
-        if (tmpGreenList.Any())
+        if (tmpGreenList.Any()&&!greenFlowMeterFlg)
         {
             Vector2 greenFlowMeter = tmpGreenList[UnityEngine.Random.Range(0, tmpGreenList.Count)];
             var tmp = gridState[(int)greenFlowMeter.y][(int)greenFlowMeter.x];
@@ -425,7 +449,7 @@ public class Play : MonoBehaviour
             flowmeterCheck[(int)COLOR.GREEN] = false;
         }
         // BLUE
-        if (tmpBlueList.Any())
+        if (tmpBlueList.Any()&&!blueFlowMeterFlg)
         {
             Vector2 blueFlowMeter = tmpBlueList[UnityEngine.Random.Range(0, tmpBlueList.Count)];
             var tmp = gridState[(int)blueFlowMeter.y][(int)blueFlowMeter.x];
@@ -876,7 +900,6 @@ public class Play : MonoBehaviour
     // パズルをクリアした時にリセット
     void ResetPazzle()
     {
-        StopAllCoroutines();
         // Add score
         //score += 100;
         playerNowHp+=10;
@@ -895,6 +918,18 @@ public class Play : MonoBehaviour
             // panelList
             panelList[i].Clear();
         }
+
+        foreach (var item in cloud)
+        {
+            Destroy(item);
+        }
+        cloud.Clear();
+
+        foreach (var item in unt)
+        {
+            Destroy(item);
+        }
+        unt.Clear();
         // grid
         grid.Clear();
         // gridState
@@ -925,6 +960,7 @@ public class Play : MonoBehaviour
         // Clear Correct Data
         allColorCorrect = false;
         //separateCount = 0;
+         StopAllCoroutines();
     }
 
     public void DecTime(float timeTemp)
@@ -940,7 +976,6 @@ public class Play : MonoBehaviour
         float temp=5.0f;
         invPanelPrefab.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
         
-        List<GameObject> cloud=new List<GameObject>();
         
         pos =PosRand(count);
         
@@ -958,15 +993,10 @@ public class Play : MonoBehaviour
 
         pos =PosRand(count);
 
-        List<BoxCollider2D> bind=new List<BoxCollider2D>();
-        
         float temp=5.0f;
 
         untObj.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
-        
-        List<GameObject> cloud=new List<GameObject>();
-        
-        pos =PosRand(count);
+        List<BoxCollider2D> bind=new List<BoxCollider2D>();
 
         foreach (var item in pos)
         {
@@ -977,10 +1007,10 @@ public class Play : MonoBehaviour
 
         foreach (var item in pos)
         {
-            cloud.Add(Instantiate(untObj, tilePosList[item.Item1][item.Item2], Quaternion.identity));
+            unt.Add(Instantiate(untObj, tilePosList[item.Item1][item.Item2], Quaternion.identity));
         }
         
-        StartCoroutine(EnableTileAfterDelay(bind, temp,cloud));
+        StartCoroutine(EnableTileAfterDelay(bind, temp,unt));
     }
 
     List<(int,int)> PosRand(int count)
@@ -993,8 +1023,9 @@ public class Play : MonoBehaviour
             tempNum.Item1=UnityEngine.Random.Range(0, mapSizeX);
             tempNum.Item2=UnityEngine.Random.Range(0, mapSizeY);
             
-            if (!temp.Contains(tempNum) || gridState[tempNum.Item1][tempNum.Item2].num < 7 || gridState[tempNum.Item1][tempNum.Item2].num > 14)
+            if (!temp.Contains(tempNum) && gridState[tempNum.Item1][tempNum.Item2].num < 7)
             {
+                Debug.Log(gridState[tempNum.Item1][tempNum.Item2].num);
                 temp.Add(tempNum);
             }
 
@@ -1008,32 +1039,32 @@ public class Play : MonoBehaviour
         yield return new WaitForSeconds(delay);
         foreach (var item in tile)
         {
-            Destroy(item);
+            if(item!=null)Destroy(item);
         }
         
     }
+
     IEnumerator EnableTileAfterDelay(List<BoxCollider2D> collider2D, float delay,List<GameObject> tile)
     {
         yield return new WaitForSeconds(delay);
         foreach (var item in collider2D)
         {
-            item.enabled = true;
+            if(item!=null)item.enabled = true;
         }
         foreach (var item in tile)
         {
-            Destroy(item);
+            if(item!=null)Destroy(item);
         }
         
     }
 
     public void ActReady(int color,float time)
     {
-        startTime=Time.time;
+        //startTime=Time.time;
         countTime=time;
+        startTime=countTime;
         leadyTimeBar.color=leadyTimeBarColor[color];
     }
-
-    
 
     public void button1()
     {
@@ -1043,6 +1074,7 @@ public class Play : MonoBehaviour
             buttonTempList[i].SetActive(i == buttonNum);
         }
     }
+
     public void button2()
     {
         buttonNum=1;
@@ -1051,6 +1083,7 @@ public class Play : MonoBehaviour
             buttonTempList[i].SetActive(i == buttonNum);
         }
     }
+
     public void button3()
     {
         buttonNum=2;
@@ -1065,4 +1098,9 @@ public class Play : MonoBehaviour
         return buttonNum;
     }
 
+    public void EnemyInit(int hp)
+    {
+        enemyMaxHp=hp;
+        enemyNowHp=enemyMaxHp;
+    }
 }

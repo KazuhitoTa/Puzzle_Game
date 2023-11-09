@@ -34,7 +34,7 @@ public class CreateButton : MonoBehaviour
                 TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
                 buttonText.font = textMeshProFont;
                 buttonText.text = "Stage" + (i + 1).ToString();
-                button.transform.position = new Vector3(0, -i, 0);
+                button.transform.position = new Vector3(0, -i+4f, 0);
                 Button buttonComponent = button.GetComponent<Button>();
                 int stage;
                 if (int.TryParse(ReadSpecificValueFromCSV(0, 1), out stage))

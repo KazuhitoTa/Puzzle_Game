@@ -15,7 +15,14 @@ public class Enemy :MonoBehaviour
     public float ct = 0;        // 行動のクールタイム CoolTime
     public float rt = 0;    // 行動の予測タイム ReadyTime
     public int[] actPattern = new int[100]; // 行動パターン（長さ100の整数配列）
-    public Play gameManager;
+    public Play play;    // ゲームマネージャー
+    public GameManager gameManager;
+    public GameManager.GameState gameState;
+    public float waitCount = 0;      // 待機時間
+    public bool countSwitch = false;    // waitCountのスイッチ
+
+    public int actcol=0;
+
     // 関数 ------------------------------------------------------------------
     // 0.時間減少
     float CalcDecTime() {
@@ -42,6 +49,79 @@ public class Enemy :MonoBehaviour
             else Debug.Log("行動パターンの数が不適です");
         }
     }
+
+
+
+    // Update関数
+    void Update()
+    {
+        if(gameManager.GetGameState()==GameManager.GameState.Play)
+        {
+            
+            // waitCountを加算
+            waitCount += Time.deltaTime;
+
+            
+            // switch分岐
+            if (!countSwitch)
+            {
+                // ctだけ待つ
+                if (waitCount >= ct)
+                {
+                    // 攻撃番号の設定
+                    actcol = UnityEngine.Random.Range(0, 3);
+                    // 攻撃予告
+                    play.ActReady(actcol, rt);
+                    // waitCountリセット
+                    waitCount = 0;
+                    // countSwitch切替
+                    countSwitch = true;
+                    // ct変動
+                    // ct += 2;
+                }
+            }
+            else 
+            {
+                // rtだけ待つ
+                if (waitCount >= rt)
+                {
+                    // 攻撃アニメーション
+                    //------------------------------
+                    // ANIMATION OF ENEMY ATTACK!!!
+                    //------------------------------
+                    // 防御番号の判別
+                    if (actcol != play.NowButtonNum())
+                    {
+                        // 攻撃のランダム処理
+                        int tmp = UnityEngine.Random.Range(0, 100);
+                        switch (actPattern[tmp]) {
+                        case 0:
+                            Debug.Log("時間減少!!");
+                            // 処理
+                            play.DecTime(CalcDecTime());
+                            break;
+                        case 1:
+                            Debug.Log("暗闇!!");
+                            // 処理
+                            play.InvPanel(CalcInvPanel());
+                            break;
+                        case 2:
+                            Debug.Log("操作不可!!");
+                            // 処理
+                            play.UntPanel(CalcUntPanel());
+                            break;
+                        }
+                    }
+
+                    waitCount = 0;
+                    countSwitch = false;
+                }
+            }
+        }
+     
+    }
+
+    /*
     // コルーチンによるループ処理
     public IEnumerator ActRoutine()
     {
@@ -86,4 +166,5 @@ public class Enemy :MonoBehaviour
             //ct += 2;
         }
     }
+    */
 }
