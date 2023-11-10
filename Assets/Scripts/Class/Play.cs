@@ -11,6 +11,8 @@ using UnityEngine.UI;
 
 public class Play : MonoBehaviour
 {
+    [SerializeField]GameObject gameCanvas;
+    [SerializeField] List<Animator> animator=new List<Animator>();
     [SerializeField]MapData mapData;
     [SerializeField] AudioSource audioSource;
     [SerializeField]public AudioClip sound1;
@@ -106,22 +108,19 @@ public class Play : MonoBehaviour
 
     public void PlayStart()
     {
-
         csvFiles = new List<TextAsset>( Resources.LoadAll<TextAsset>(GetStageFilePath()));
         PanelLoading();
         //PanelLoading("test09");
         GridInit();
         enemyNowHp=enemyMaxHp;
         playerNowHp=playerMaxHp;
-        var temp=Instantiate(mapData.Maps[ButtonManager.stageNumber-1].EnemyPrefab,new Vector3(1.3f,2.6f,0),Quaternion.identity);
+        
+        var temp=(GameObject)Instantiate(mapData.Maps[ButtonManager.stageNumber-1].EnemyPrefab);
+        temp.transform.SetParent(gameCanvas.transform, false);
         clearObjects.Add(temp);
+        
     }
 
-    public void PlayEntry()
-    {
-        startTime=Time.time-startTime;
-        Debug.Log(startTime);
-    }
 
     public void PlayUpdate()
     {
@@ -218,6 +217,7 @@ public class Play : MonoBehaviour
         {
             item.SetActive(false);
         }
+        leadyTimeBar.gameObject.SetActive(false);
     }
 
     string GetStageFilePath()
@@ -361,7 +361,6 @@ public class Play : MonoBehaviour
 
     void GridInit()
     {   
-
 
         UnityEngine.Random.InitState(DateTime.Now.Millisecond);
 
@@ -900,11 +899,14 @@ public class Play : MonoBehaviour
     // パズルをクリアした時にリセット
     void ResetPazzle()
     {
+        
+        animator[0].SetTrigger("Atk");
+        
         // Add score
         //score += 100;
         playerNowHp+=10;
-        enemyNowHp-=10;
-        if(enemyNowHp<0)enemyNowHp=0;
+       
+        
 
         // Clear Lists
         for (int i = 0; i < mapSizeX; i++)
@@ -1103,4 +1105,11 @@ public class Play : MonoBehaviour
         enemyMaxHp=hp;
         enemyNowHp=enemyMaxHp;
     }
+
+    public void EnemyDamage()
+    {
+        enemyNowHp-=10;
+        if(enemyNowHp<0)enemyNowHp=0;
+    }
+
 }

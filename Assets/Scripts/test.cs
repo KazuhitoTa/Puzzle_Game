@@ -10,7 +10,7 @@ public class test : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.Return))
+        if(Input.GetKey(KeyCode.A))
         {
             stageNumber++;
             Debug.Log(stageNumber);

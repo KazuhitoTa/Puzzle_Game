@@ -20,6 +20,7 @@ public class Enemy :MonoBehaviour
     public GameManager.GameState gameState;
     public float waitCount = 0;      // 待機時間
     public bool countSwitch = false;    // waitCountのスイッチ
+    public Animator animator;
 
     public int actcol=0;
 
