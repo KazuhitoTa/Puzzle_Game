@@ -6,11 +6,13 @@ using System.Linq;
 using kurukuru;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Play : MonoBehaviour
 {
+    
     [SerializeField]GameObject gameCanvas;
     [SerializeField]List<GameObject> playerGameObjects=new List<GameObject>(); 
     [SerializeField] List<Animator> animator=new List<Animator>();
@@ -78,6 +80,9 @@ public class Play : MonoBehaviour
     List<GameObject> cloud=new List<GameObject>();
     List<GameObject> unt=new List<GameObject>();
 
+    [SerializeField]GameObject oChan;
+
+
     Vector2[] goalPos = // ゴールの位置          
     {
         new Vector2(-1, -1),    // RED
@@ -111,7 +116,7 @@ public class Play : MonoBehaviour
     {
         csvFiles = new List<TextAsset>( Resources.LoadAll<TextAsset>(GetStageFilePath()));
         PanelLoading();
-        //PanelLoading("test09");
+        //PanelLoading("StageData3/s_hard09");
         GridInit();
         enemyNowHp=enemyMaxHp;
         playerNowHp=playerMaxHp;
@@ -128,9 +133,19 @@ public class Play : MonoBehaviour
         
     }
 
+    public void PlayInit()
+    {
+        foreach (var item in animator)
+        {
+            item.enabled=true;
+        }
+    }
+
 
     public void PlayUpdate()
     {
+        //oChan.transform.position=Vector3.MoveTowards(oChan.transform.position,test(), 1.0f * Time.deltaTime);
+
         if(0<countTime)
         {
             countTime=countTime-Time.deltaTime;
@@ -224,6 +239,7 @@ public class Play : MonoBehaviour
         {
             item.SetActive(false);
         }
+        
         leadyTimeBar.gameObject.SetActive(false);
     }
 
@@ -368,7 +384,6 @@ public class Play : MonoBehaviour
 
     void GridInit()
     {   
-
         UnityEngine.Random.InitState(DateTime.Now.Millisecond);
 
         // 流量計生成用の仮リスト
@@ -426,9 +441,23 @@ public class Play : MonoBehaviour
                 // 流量計を書いているかどうか確認
                 else if ((gridState[r][c].num == 15) || (gridState[r][c].num == 16))
                 {
-                    if      (gridState[r][c].col == "red")     redFlowMeterFlg=true;
-                    else if (gridState[r][c].col == "green")   greenFlowMeterFlg=true;
-                    else if (gridState[r][c].col == "blue")    blueFlowMeterFlg=true;
+                    if      (gridState[r][c].col == "red")
+                    {
+                        redFlowMeterFlg=true;
+                        flowmeterCheck[0]=false;
+                    }
+                    
+                    else if (gridState[r][c].col == "green")
+                    {
+                        greenFlowMeterFlg=true;
+                        flowmeterCheck[1]=false;
+                    }
+                    else if (gridState[r][c].col == "blue")
+                    {
+                        blueFlowMeterFlg=true;
+                        flowmeterCheck[2]=false;
+                    }
+                    
                 }
 
             }
@@ -904,7 +933,7 @@ public class Play : MonoBehaviour
     }
 
     // パズルをクリアした時にリセット
-    void ResetPazzle()
+    public void ResetPazzle()
     {
         
         animator[0].SetTrigger("Atk");
@@ -1123,5 +1152,25 @@ public class Play : MonoBehaviour
     {
         animator[1].SetTrigger("Grd");
     }
+
+    public void SetPause()
+    {
+        foreach (var item in animator)
+        {
+            item.enabled=false;
+        }
+        gameManager.ChangeGameState(GameManager.GameState.Pause);
+    }
+    
+    void OValPos(List<Vector2> movePosList)
+    {
+        int temp=movePosList.Count-1;
+        Vector3 posTemp=tilePosList[(int)movePosList[temp].x][(int)movePosList[temp].y];
+        if((oChan.transform.position-posTemp).magnitude>=0.1f)
+        {
+           
+        }
+    }
+
 
 }

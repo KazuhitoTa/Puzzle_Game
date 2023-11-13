@@ -30,10 +30,7 @@ public class Pause :MonoBehaviour
         
     }
 
-    public void SetPause()
-    {
-        gameManager.ChangeGameState(GameManager.GameState.Pause);
-    }
+    
 
     public void EndPause()
     {

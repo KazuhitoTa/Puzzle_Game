@@ -60,7 +60,7 @@ public class Enemy :MonoBehaviour
     {
         if(gameManager.GetGameState()==GameManager.GameState.Play)
         {
-            
+            enemyAnimator.enabled=true;
             // waitCountを加算
             waitCount += Time.deltaTime;
 
@@ -129,6 +129,10 @@ public class Enemy :MonoBehaviour
                 }
             }
 
+        }
+        else
+        {
+            enemyAnimator.enabled=false;
         }
      
     }

@@ -2390,8 +2390,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1671590218}
-        m_TargetAssemblyTypeName: Pause, Assembly-CSharp
+      - m_Target: {fileID: 1671590217}
+        m_TargetAssemblyTypeName: Play, Assembly-CSharp
         m_MethodName: SetPause
         m_Mode: 1
         m_Arguments:
@@ -3368,6 +3368,7 @@ MonoBehaviour:
   gameClear: {fileID: 1671590220}
   gameOver: {fileID: 1671590219}
   gameState: 0
+  startCheck: 
 --- !u!4 &1671590216
 Transform:
   m_ObjectHideFlags: 0
@@ -3480,6 +3481,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 2293945472563879363, guid: e55c23fa5c5423345bf8dfbf8d281b66, type: 3}
   leadyTimeBar: {fileID: 1961743480}
   untObj: {fileID: 2057804465302517532, guid: 751bab3eec309544dba792bb19b21a22, type: 3}
+  oChan: {fileID: 0}
 --- !u!114 &1671590218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4725,10 +4727,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.00013130903
-    y: 0
-    width: 0.9997374
-    height: 1
+    x: 0
+    y: 0.00022312999
+    width: 1
+    height: 0.99955374
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60

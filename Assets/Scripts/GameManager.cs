@@ -17,7 +17,7 @@ namespace kurukuru
         [SerializeField]GameClear gameClear;
         [SerializeField]GameOver gameOver;
         public GameState gameState=GameState.Play;
-        private List<bool> startCheck=new List<bool>();
+        [SerializeField]private List<bool> startCheck=new List<bool>();
 
 
         public enum GameState
@@ -27,6 +27,12 @@ namespace kurukuru
             GameClear,
             GameOver
         }
+
+        //敵の行動一時停止
+        //ピースの操作停止
+        //アニメーション再生
+        //アニメーション終了後にパズルの時間停止
+        //時間制限停止
 
         void Start()
         {
@@ -74,6 +80,7 @@ namespace kurukuru
             if (gameStateTemp==GameState.Pause)     pause.PauseStart();
             else if (gameStateTemp==GameState.GameClear) gameClear.GameClearStart();
             else if (gameStateTemp==GameState.GameOver)  gameOver.GameOverStart();
+            else if (gameStateTemp==GameState.Play) play.PlayInit();
             gameState=gameStateTemp;
         }
 
