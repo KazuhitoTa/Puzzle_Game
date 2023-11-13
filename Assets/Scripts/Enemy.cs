@@ -23,14 +23,16 @@ public class Enemy :MonoBehaviour
     public Animator animator;
 
     public int actcol=0;
+    public Animator enemyAnimator;
+	public Animator subAnimator;
 
     // 関数 ------------------------------------------------------------------
     // 0.時間減少
-    float CalcDecTime() {
+    public float CalcDecTime() {
         return UnityEngine.Random.Range(dec * 0.9f, dec * 1.1f);
     }
     // 1.暗闇
-    int CalcInvPanel() {
+    public int CalcInvPanel() {
         int invCount = UnityEngine.Random.Range(inv - 2, inv + 2 + 1);
         if (invCount < 1) invCount = 1;
         return invCount;
@@ -86,6 +88,9 @@ public class Enemy :MonoBehaviour
                 // rtだけ待つ
                 if (waitCount >= rt)
                 {
+                    // countSwitch切替
+                    countSwitch = false;
+
                     // 攻撃アニメーション
                     //------------------------------
                     // ANIMATION OF ENEMY ATTACK!!!
@@ -93,34 +98,44 @@ public class Enemy :MonoBehaviour
                     // 防御番号の判別
                     if (actcol != play.NowButtonNum())
                     {
-                        // 攻撃のランダム処理
+                        enemyAnimator.SetTrigger("Atk");
+                       // 攻撃のランダム処理
                         int tmp = UnityEngine.Random.Range(0, 100);
                         switch (actPattern[tmp]) {
-                        case 0:
-                            Debug.Log("時間減少!!");
-                            // 処理
-                            play.DecTime(CalcDecTime());
-                            break;
-                        case 1:
-                            Debug.Log("暗闇!!");
-                            // 処理
-                            play.InvPanel(CalcInvPanel());
-                            break;
-                        case 2:
-                            Debug.Log("操作不可!!");
-                            // 処理
-                            play.UntPanel(CalcUntPanel());
-                            break;
+                            case 0:
+                                Debug.Log("時間減少!!");
+                                // 処理
+                                play.DecTime(CalcDecTime());
+                                break;
+                            case 1:
+                                Debug.Log("暗闇!!");
+                                // 処理
+                                play.InvPanel(CalcInvPanel());
+                                break;
+                            case 2:
+                                Debug.Log("操作不可!!");
+                                // 処理
+                                play.UntPanel(CalcUntPanel());
+                                break;
                         }
+                    }
+                    else 
+                    {
+                        enemyAnimator.SetTrigger("MissAtk");
+                        play.Grd();
                     }
 
                     waitCount = 0;
-                    countSwitch = false;
                 }
             }
+
         }
      
     }
+
+
+    
+
 
     /*
     // コルーチンによるループ処理

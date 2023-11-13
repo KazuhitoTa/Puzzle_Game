@@ -12,6 +12,7 @@ using UnityEngine.UI;
 public class Play : MonoBehaviour
 {
     [SerializeField]GameObject gameCanvas;
+    [SerializeField]List<GameObject> playerGameObjects=new List<GameObject>(); 
     [SerializeField] List<Animator> animator=new List<Animator>();
     [SerializeField]MapData mapData;
     [SerializeField] AudioSource audioSource;
@@ -117,6 +118,12 @@ public class Play : MonoBehaviour
         
         var temp=(GameObject)Instantiate(mapData.Maps[ButtonManager.stageNumber-1].EnemyPrefab);
         temp.transform.SetParent(gameCanvas.transform, false);
+        foreach (var item in playerGameObjects)
+        {
+            var tmp=(GameObject)Instantiate(item);
+            tmp.transform.SetParent(gameCanvas.transform, false);
+            animator.Add(tmp.GetComponent<Animator>());
+        }
         clearObjects.Add(temp);
         
     }
@@ -128,7 +135,7 @@ public class Play : MonoBehaviour
         {
             countTime=countTime-Time.deltaTime;
             leadyTimeBar.fillAmount=countTime/5;
-            Debug.Log(countTime);
+            //Debug.Log(countTime);
         }
 
         playerNowHp -= Time.deltaTime * 1f; // 10の速度でHPを減少させる
@@ -496,7 +503,7 @@ public class Play : MonoBehaviour
                tileScaleY=(5f/(float)mapSizeY);
 
                 //生成位置
-                Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -3.6f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
+                Vector3 posTemp=new Vector3((-2f-((1f-tileScaleX)/2))+tileScaleX*col, -2.8f-((1f-tileScaleY)/2)+tileScaleY*row, 0);
                 
                 //生成する座標をtilePosListに保存
                 tilePosList[row][col] = posTemp;
@@ -1110,6 +1117,11 @@ public class Play : MonoBehaviour
     {
         enemyNowHp-=10;
         if(enemyNowHp<0)enemyNowHp=0;
+    }
+
+    public void Grd()
+    {
+        animator[1].SetTrigger("Grd");
     }
 
 }

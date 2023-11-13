@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Gas : Enemy
 {
+	
+	
     // Start is called before the first frame update
     void Start()
     {
@@ -23,5 +25,4 @@ public class Gas : Enemy
 		play.EnemyInit(hp);
 		 
     }
-
 }
