@@ -443,13 +443,13 @@ PlayerSettings:
       m_Height: 180
       m_Kind: 0
       m_SubKind: iPhone
-    - m_Textures:
-      - {fileID: 0}
+    - m_Textures: []
       m_Width: 120
       m_Height: 120
       m_Kind: 0
       m_SubKind: iPhone
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: f8c9849ac03edcd489fe7ddfb11301ba, type: 3}
       m_Width: 167
       m_Height: 167
       m_Kind: 0
