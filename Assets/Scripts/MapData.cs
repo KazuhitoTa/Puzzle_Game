@@ -13,33 +13,24 @@ public class MapData : ScriptableObject
     public class Map
     {
         [SerializeField]private GameObject enemyPrefab;
-        [SerializeField]private GameObject playerPrefab;
-        [SerializeField]private Image backGround;
-        [SerializeField]private int enemyHP;
-        [SerializeField] private int enemyAtk;
-        [SerializeField]private int time;
-        public List<enemyState> enemyStates=new List<enemyState>();
+        public int hp;          // 体力 HitPoint
+        public float dec;       // 制限時間を減少させる値 Decrease
+        public int inv;     // 暗闇にする個数 Invisible
+        //int invtime = 0;  // 暗闇にする時間 InvisibleTime
+        public int unt;     // 操作不可の個数 Untachable
+        //int unttime = 0;  // 操作不可の時間 UntachableTime
+        public float ct;        // 行動のクールタイム CoolTime
+        
+        public float rt;    // 行動の予測タイム ReadyTime
+        public Vector3 actParameter;
+        [SerializeField]private float time;
+        
         
 
 
         public GameObject EnemyPrefab{get=>enemyPrefab;}
-        public GameObject PlayerPrefab{get=>playerPrefab;}
-        public Image BackGround{get=>backGround;}
-        public int EnemyHP{get=>enemyHP;}
-        public int EnemyAtk{get=>enemyAtk;}
-        public int Time{get=>time;}
+        public float Time{get=>time;}
 
-        public enum enemyState
-        {
-            atk,
-            blind,
-            poison
-        }
-
-        public void Action(enemyState temp)
-        {
-            
-        }
     }
     
 }

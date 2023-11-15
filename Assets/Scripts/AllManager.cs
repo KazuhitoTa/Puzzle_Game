@@ -42,7 +42,7 @@ public class AllManager : MonoBehaviour
 
     public void OnClick()
     {
-        SceneManager.LoadScene("StageSelect");
+        SceneManager.LoadScene("Stage");
         //stageState=StageState.StageSelect;
     }
 }  

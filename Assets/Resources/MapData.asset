@@ -14,702 +14,902 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Maps:
   - enemyPrefab: {fileID: 8362045762321930936, guid: 956bd5b9d03d95a45a7d2583342da895, type: 3}
-    playerPrefab: {fileID: 8362045762321930936, guid: 956bd5b9d03d95a45a7d2583342da895, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 10
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
+    hp: 30
+    dec: 10
+    inv: 3
+    unt: 3
+    ct: 6
+    rt: 6
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 1
+  - enemyPrefab: {fileID: 8362045762321930936, guid: 7486b9b306173b24d9b6b97e48f03b4a, type: 3}
+    hp: 50
+    dec: 10
+    inv: 5
+    unt: 5
+    ct: 5
+    rt: 6
+    actParameter: {x: 20, y: 40, z: 40}
+    time: 1
+  - enemyPrefab: {fileID: 8362045762321930936, guid: 3318b0c38b319ba4ba33ca1c76f1f2eb, type: 3}
+    hp: 70
+    dec: 10
+    inv: 8
+    unt: 8
+    ct: 4
+    rt: 6
+    actParameter: {x: 10, y: 45, z: 45}
+    time: 1
   - enemyPrefab: {fileID: 1429727102173041942, guid: 98c46e7c7752cdd4a9339aac49bfec6b, type: 3}
-    playerPrefab: {fileID: 1429727102173041942, guid: 98c46e7c7752cdd4a9339aac49bfec6b, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 30
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
-  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    playerPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    backGround: {fileID: 0}
-    enemyHP: 50
-    enemyAtk: 0
-    time: 0
-    enemyStates: 
+    hp: 50
+    dec: 20
+    inv: 3
+    unt: 3
+    ct: 7
+    rt: 5
+    actParameter: {x: 60, y: 20, z: 20}
+    time: 1
+  - enemyPrefab: {fileID: 1429727102173041942, guid: b409a1f442dd016438a9e6a79352fa7a, type: 3}
+    hp: 60
+    dec: 25
+    inv: 5
+    unt: 5
+    ct: 6
+    rt: 5
+    actParameter: {x: 80, y: 10, z: 10}
+    time: 1.2
+  - enemyPrefab: {fileID: 1429727102173041942, guid: 10c1369053662b849bf65d3804d3e751, type: 3}
+    hp: 80
+    dec: 40
+    inv: 0
+    unt: 0
+    ct: 6
+    rt: 5
+    actParameter: {x: 100, y: 0, z: 0}
+    time: 1.5
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 29389e0c71c9340419a25c0ad2f41c40, type: 3}
+    hp: 70
+    dec: 10
+    inv: 5
+    unt: 5
+    ct: 7
+    rt: 4
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 1.5
+  - enemyPrefab: {fileID: 3118883216121035583, guid: f18595528099b904bbc5bff4a85a788b, type: 3}
+    hp: 80
+    dec: 15
+    inv: 10
+    unt: 10
+    ct: 6
+    rt: 4
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 1.5
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2
+  - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
+    hp: 100
+    dec: 20
+    inv: 15
+    unt: 15
+    ct: 5
+    rt: 3
+    actParameter: {x: 34, y: 33, z: 33}
+    time: 2

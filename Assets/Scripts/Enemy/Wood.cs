@@ -18,7 +18,7 @@ public class Wood : Enemy
 		//unttime = 3;
 		ct = 5.0f;
 		rt=5.0f;
-		SetActPattern(20, 55, 25);
+		SetActPattern(actParameter);
 		Debug.Log(hp);
 		play.EnemyInit(hp);
 		 

@@ -14,6 +14,7 @@ namespace kurukuru
     {
         [SerializeField]Play play;
         [SerializeField]Pause pause;
+        [SerializeField]Tutorial tutorial;
         [SerializeField]GameClear gameClear;
         [SerializeField]GameOver gameOver;
         public GameState gameState=GameState.Play;
@@ -24,6 +25,7 @@ namespace kurukuru
         {
             Play,
             Pause,
+            Tutorial,
             GameClear,
             GameOver
         }
@@ -53,6 +55,11 @@ namespace kurukuru
                     pause.PauseUpdate();
                     break;
 
+                case GameState.Tutorial:
+                    //チュートリアル中の処理を実行
+                    tutorial.TutorialUpdate();
+                    break;
+
                 case GameState.GameClear:
                     // ゲームクリア時の処理を実行
                     gameClear.GameClearUpdate();
@@ -76,6 +83,7 @@ namespace kurukuru
             if (gameStateTemp==GameState.Pause)     pause.PauseStart();
             else if (gameStateTemp==GameState.GameClear) gameClear.GameClearStart();
             else if (gameStateTemp==GameState.GameOver)  gameOver.GameOverStart();
+            else if(gameStateTemp==GameState.Tutorial) tutorial.TutorialStart();
             else if (gameStateTemp==GameState.Play) play.PlayInit();
             gameState=gameStateTemp;
         }
@@ -91,7 +99,7 @@ namespace kurukuru
 
         public void GoStageSelect()
         {
-            SceneManager.LoadScene("StageSelect");
+            SceneManager.LoadScene("Stage");
         }
         public void GoGame()
         {

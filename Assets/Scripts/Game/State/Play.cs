@@ -135,7 +135,7 @@ public class Play : MonoBehaviour
         enemyNowHp=enemyMaxHp;
         playerNowHp=playerMaxHp;
         
-        var temp=(GameObject)Instantiate(mapData.Maps[ButtonManager.stageNumber-1].EnemyPrefab);
+        var temp=(GameObject)Instantiate(mapData.Maps[kurukuru.ButtonManager.stageNumber-1].EnemyPrefab);
         temp.transform.SetParent(gameCanvas.transform, false);
         foreach (var item in playerGameObjects)
         {
@@ -144,6 +144,7 @@ public class Play : MonoBehaviour
             animator.Add(tmp.GetComponent<Animator>());
         }
         // clearObjects.Add(temp);
+        Debug.Log(mapData.Maps[ButtonManager.stageNumber].Time);
         
     }
 
@@ -163,13 +164,13 @@ public class Play : MonoBehaviour
         if(0<countTime&&!timeStop)
         {
             countTime=countTime-Time.deltaTime;
-            leadyTimeBar.fillAmount=countTime/5;
+            leadyTimeBar.fillAmount=countTime/mapData.Maps[ButtonManager.stageNumber-1].rt;
             //Debug.Log(countTime);
         }
 
         if(!timeStop)
         {
-            playerNowHp -= Time.deltaTime * 1f; // 10の速度でHPを減少させる
+            playerNowHp -= Time.deltaTime * mapData.Maps[ButtonManager.stageNumber-1].Time; // 10の速度でHPを減少させる
             
         }
             playerNowHp = Mathf.Max(0, playerNowHp); // HPが0未満にならないように制約をかける
@@ -184,10 +185,23 @@ public class Play : MonoBehaviour
         if(enemyNowHp<=0)
         {
             PlayEnd();
+            foreach (var item in animator)
+            {
+                item.SetTrigger("Win");
+            }
             gameManager.ChangeGameState(GameManager.GameState.GameClear);
         }
         
-        if(playerNowHp<=0)gameManager.ChangeGameState(GameManager.GameState.GameOver);
+        if(playerNowHp<=0)
+        {
+            foreach (var item in animator)
+            {
+                item.SetTrigger("Lose");
+            }
+            gameManager.ChangeGameState(GameManager.GameState.GameOver);
+        }
+        
+        
 
         if ((Input.touchCount > 0 || Input.GetMouseButtonDown(0)) && GetClickObj() && !isRotate)
         {
@@ -300,7 +314,7 @@ public class Play : MonoBehaviour
 
     string GetStageFilePath()
     {
-        return "StageData/StageData"+ButtonManager.stageNumber.ToString();
+        return "StageData/StageData"+kurukuru.ButtonManager.stageNumber.ToString();
     }
 
     void PanelLoading()
@@ -1012,7 +1026,7 @@ public class Play : MonoBehaviour
     {   
         // Add score
         //score += 100;
-        playerNowHp+=10;
+        playerNowHp+=20;
         if(playerNowHp>100)playerNowHp=100;
        
         
@@ -1096,11 +1110,12 @@ public class Play : MonoBehaviour
 
     public void InvPanel(int count)
     {
+        Debug.LogError(count<=0);
+
         Damaged();
         List<(int,int)> pos=new List<(int, int)>();
         
         
-        float temp=5.0f;
         invPanelPrefab.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
         
         
@@ -1111,17 +1126,19 @@ public class Play : MonoBehaviour
             cloud.Add(Instantiate(invPanelPrefab, tilePosList[item.Item1][item.Item2], Quaternion.identity));
         }
 
-        StartCoroutine(DestroyTileAfterDelay(cloud, temp));
+        StartCoroutine(DestroyTileAfterDelay(cloud, 5));
     }
 
     public void UntPanel(int count)
     {
+
+        Debug.LogError(count<=0);
+
         Damaged();
         List<(int,int)> pos=new List<(int, int)>();
 
         pos =PosRand(count);
 
-        float temp=5.0f;
 
         untObj.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
         List<BoxCollider2D> bind=new List<BoxCollider2D>();
@@ -1138,14 +1155,14 @@ public class Play : MonoBehaviour
             unt.Add(Instantiate(untObj, tilePosList[item.Item1][item.Item2], Quaternion.identity));
         }
         
-        StartCoroutine(EnableTileAfterDelay(bind, temp,unt));
+        StartCoroutine(EnableTileAfterDelay(bind, 5,unt));
     }
 
     List<(int,int)> PosRand(int count)
     {
         List<(int,int)> temp=new List<(int, int)>();
 
-        while (temp.Count<5)
+        while (temp.Count<count)
         {
             (int,int) tempNum=(0,0);
             tempNum.Item1=UnityEngine.Random.Range(0, mapSizeX);
@@ -1469,7 +1486,7 @@ public class Play : MonoBehaviour
 
     IEnumerator MovePlayer(List<Vector3> positions,int num)
     {
-        float speed = positions.Count; // 移動速度
+        float speed = positions.Count*5.0f; // 移動速度
 
         foreach (var position in positions)
         {

@@ -26,9 +26,9 @@ public class GameClear : MonoBehaviour
             item.SetActive(true);
         }
 
-        Debug.Log(ButtonManager.stageNumber);
+        Debug.Log(kurukuru.ButtonManager.stageNumber);
 
-        ChangeStageState(ButtonManager.stageNumber);
+        ChangeStageState(kurukuru.ButtonManager.stageNumber);
     }
 
     public void GameClearUpdate()

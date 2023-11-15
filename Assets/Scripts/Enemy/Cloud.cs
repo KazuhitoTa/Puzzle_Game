@@ -10,16 +10,21 @@ public class Cloud : Enemy
     {
         play=GameObject.FindWithTag("GameController").GetComponent<Play>();
 		gameManager=GameObject.FindWithTag("GameController").GetComponent<GameManager>();
-        //hp = 30;
-		dec = 10;
-		inv = 2;
-		//invtime = 5;
-		unt = 1;
-		//unttime = 3;
-		ct = 5.0f;
-		rt=5.0f;
-		SetActPattern(20, 55, 25);
+       
+		hp = mapData.Maps[ButtonManager.stageNumber-1].hp;          // 体力 HitPoint
+		dec = mapData.Maps[ButtonManager.stageNumber-1].dec;       // 制限時間を減少させる値 Decrease
+		inv = mapData.Maps[ButtonManager.stageNumber-1].inv;     // 暗闇にする個数 Invisible
+		
+		unt = mapData.Maps[ButtonManager.stageNumber-1].unt;     // 操作不可の個数 Untachable
+		
+		ct = mapData.Maps[ButtonManager.stageNumber-1].ct;        // 行動のクールタイム CoolTime
+	
+		rt = mapData.Maps[ButtonManager.stageNumber-1].rt;    // 行動の予測タイム ReadyTime
+		actParameter=mapData.Maps[ButtonManager.stageNumber-1].actParameter;
+
+		SetActPattern(actParameter);
 		play.EnemyInit(hp);
+		ctTemp=ct+UnityEngine.Random.Range(-2,2);
 		 
     }
 

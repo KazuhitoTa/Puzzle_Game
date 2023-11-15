@@ -13,7 +13,9 @@ public class Enemy :MonoBehaviour
     public int unt = 0;     // 操作不可の個数 Untachable
     //int unttime = 0;  // 操作不可の時間 UntachableTime
     public float ct = 0;        // 行動のクールタイム CoolTime
+    
     public float rt = 0;    // 行動の予測タイム ReadyTime
+    public Vector3 actParameter;
     public int[] actPattern = new int[100]; // 行動パターン（長さ100の整数配列）
     public Play play;    // ゲームマネージャー
     public GameManager gameManager;
@@ -21,6 +23,8 @@ public class Enemy :MonoBehaviour
     public float waitCount = 0;      // 待機時間
     public bool countSwitch = false;    // waitCountのスイッチ
     public Animator animator;
+
+    public MapData mapData;
 
     public int actcol=0;
     public Animator enemyAnimator;
@@ -30,6 +34,8 @@ public class Enemy :MonoBehaviour
     public bool missAtkFlog=false;
     public bool dedFlog=false;
     public bool pauseFlog=false;
+    public float ctTemp;
+   
 
     // 関数 ------------------------------------------------------------------
     // 0.時間減少
@@ -49,11 +55,11 @@ public class Enemy :MonoBehaviour
         return untCount;
     }
     // 行動パターンの割り振り
-    public void SetActPattern(int a, int b, int c) {
+    public void SetActPattern(Vector3 a) {
         for (int i = 0; i < 100; i++) {
-            if (i < a) actPattern[i] = 0;
-            else if (i < a + b) actPattern[i] = 1;
-            else if (i < a + b + c) actPattern[i] = 2;
+            if (i < a.x) actPattern[i] = 0;
+            else if (i < a.x + a.y) actPattern[i] = 1;
+            else if (i < a.x + a.y + a.z) actPattern[i] = 2;
             else Debug.Log("行動パターンの数が不適です");
         }
     }
@@ -63,24 +69,29 @@ public class Enemy :MonoBehaviour
     // Update関数
     protected virtual void Update()
     {
-        if(play.enemyStop())
+        
+        if(gameManager.GetGameState()==GameManager.GameState.Play)
         {
-            enemyAnimator.enabled=false;
-            pauseFlog=true;
-        }
-        else if(gameManager.GetGameState()==GameManager.GameState.Play)
-        {
-            enemyAnimator.enabled=true;
-            // waitCountを加算
-            waitCount += Time.deltaTime;
-
+            if(play.enemyStop())
+            {
+                enemyAnimator.enabled=false;
+                pauseFlog=true;
+            }
+            else
+            {
+                enemyAnimator.enabled=true;
+                 // waitCountを加算
+                waitCount += Time.deltaTime;
+            }
             
+
             // switch分岐
             if (!countSwitch)
             {
                 // ctだけ待つ
-                if (waitCount >= ct)
+                if (waitCount >= ctTemp)
                 {
+                    ctTemp=ct;
                     // 攻撃番号の設定
                     actcol = UnityEngine.Random.Range(0, 3);
                     // 攻撃予告
@@ -90,7 +101,7 @@ public class Enemy :MonoBehaviour
                     // countSwitch切替
                     countSwitch = true;
                     // ct変動
-                    // ct += 2;
+                    ctTemp+=UnityEngine.Random.Range(-2,2);
                 }
             }
             else 
@@ -108,7 +119,6 @@ public class Enemy :MonoBehaviour
                     // 防御番号の判別
                     if (actcol != play.NowButtonNum())
                     {
-                        //enemyAnimator.SetTrigger("Atk");
                         attackFlog=true;
                        // 攻撃のランダム処理
                         int tmp = UnityEngine.Random.Range(0, 100);
@@ -121,7 +131,8 @@ public class Enemy :MonoBehaviour
                             case 1:
                                 Debug.Log("暗闇!!");
                                 // 処理
-                                play.InvPanel(CalcInvPanel());
+                                //play.InvPanel(CalcInvPanel());
+                                play.InvPanel(inv);
                                 break;
                             case 2:
                                 Debug.Log("操作不可!!");
@@ -145,6 +156,8 @@ public class Enemy :MonoBehaviour
         {
             if(!waitFlog)
             {
+                enemyAnimator.enabled=true;
+                subAnimator.enabled=true;
                 waitFlog=true;
                 dedFlog=true;
             } 
