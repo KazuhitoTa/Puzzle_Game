@@ -20,6 +20,7 @@ public class MapData : ScriptableObject
         public int unt;     // 操作不可の個数 Untachable
         //int unttime = 0;  // 操作不可の時間 UntachableTime
         public float ct;        // 行動のクールタイム CoolTime
+        public Image image;
         
         public float rt;    // 行動の予測タイム ReadyTime
         public Vector3 actParameter;

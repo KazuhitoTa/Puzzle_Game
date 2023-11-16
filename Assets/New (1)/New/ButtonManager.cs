@@ -12,7 +12,8 @@ namespace kurukuru
     public class ButtonManager : MonoBehaviour
     {
         public static int stageNumber = 0;
-        private static RectTransform clickedButtonRect; // �����ꂽ�{�^���̈ʒu
+        public static int selectNumber = 0;
+        private RectTransform clickedButtonRect; // �����ꂽ�{�^���̈ʒu
         private RectTransform myRectTransform;
         private RectTransform[] buttonsRectTransform; // �{�^����RectTransform�̔z��
         private Button[] buttons; // �{�^���̔z��
@@ -27,14 +28,12 @@ namespace kurukuru
             if (!File.Exists(filePath))
             {
                 // �����f�[�^���쐬
-                string initialData = "StageData,0";
-                File.WriteAllText(filePath, initialData);
+                string[] initialData = { "StageData,0", "SelectData,0" };
+                File.WriteAllLines(filePath, initialData);
             }
         }
         void Start()
-        {
-           
-            
+        {   
             int stage;
             if (int.TryParse(ReadSpecificValueFromCSV(0, 1), out stage))
             {
@@ -77,14 +76,25 @@ namespace kurukuru
                 }
             }
 
-             myRectTransform = this.gameObject.transform as RectTransform;
-             clickedButtonRect=buttonsRectTransform[0];
-            if (myRectTransform != null)
+            myRectTransform = this.gameObject.transform as RectTransform;
+            int select;
+            if (int.TryParse(ReadSpecificValueFromCSV(1, 1), out select))
             {
-                myRectTransform.position = new Vector3(myRectTransform.position.x, -clickedButtonRect.anchoredPosition.y + 200,myRectTransform.position.z);
-                //Debug.Log("�R���e���g" + myRectTransform.position.y);
-                //myRectTransform.position = new Vector3(myRectTransform.position.x, -clickedButtonRect.anchoredPosition.y + 200, myRectTransform.position.z);
-                //Debug.Log(myRectTransform.position.y);
+
+                if(select==0)select=1;
+                clickedButtonRect = buttonsRectTransform[select-1];
+                
+                if (myRectTransform != null)
+                {
+                    myRectTransform.anchoredPosition = new Vector2(myRectTransform.anchoredPosition.x, -clickedButtonRect.anchoredPosition.y - 200);
+                    //Debug.Log("�R���e���g" + myRectTransform.position.y);
+                    //myRectTransform.position = new Vector3(myRectTransform.position.x, -clickedButtonRect.anchoredPosition.y + 200, myRectTransform.position.z);
+                    //Debug.Log(myRectTransform.position.y);
+                }
+            }
+            else
+            {
+                myRectTransform.anchoredPosition = new Vector2(0,0);
             }
         }
 
@@ -98,6 +108,9 @@ namespace kurukuru
                 //Debug.Log("�{�^��"+clickedButtonRect.position.y);
             }
             stageNumber = buttonNumber;
+            selectNumber = buttonNumber;
+            SaveToCSV(1,1,selectNumber);
+            Debug.Log(buttonNumber);
             SceneManager.LoadScene("kurukuruGame");
         }
 
@@ -134,7 +147,37 @@ namespace kurukuru
                 Debug.LogError("CSV�t�@�C���̓ǂݍ��ݒ��ɃG���[���������܂���: " + e.Message);
             }
             return null;    // �Ԃ��l���Ȃ��ꍇ�Anull��Ԃ�
-        }   
+        }  
+
+        void SaveToCSV(int writeColPlace, int writeRowPlace, int writeValue)
+        {
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);   // 列ごとに読み込み
+                if (writeColPlace < lines.Length)               // 列の座標が配列の長さ未満かどうかを確認
+                {
+                    string[] elements = lines[writeColPlace].Split(',');  // 行の座標に対応する行を取得しカンマで分割して配列elementsに格納
+                    if (writeRowPlace < elements.Length)                  // 行の座標が配列の長さ未満かどうかを確認
+                    {
+                        elements[writeRowPlace] = writeValue.ToString();      // 文字列に変換し、elements内の指定された列の座標の要素を変更
+                        lines[writeColPlace] = string.Join(",", elements);    // elementsを再びカンマで連結（しないといけないらしい）
+                        File.WriteAllLines(filePath, lines);                // 更新されたlinesを書き込み
+                    }
+                    else
+                    {
+                        Debug.LogError("指定された行が範囲外です");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("指定された列が範囲外です");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("書き込み失敗" + e.Message);
+            }
+        } 
     }
 }
 

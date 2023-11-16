@@ -32,6 +32,11 @@ namespace kurukuru
             GameOver
         }
 
+        void Awake()
+        {
+            Application.targetFrameRate = 60;
+        }
+
         
 
         void Start()

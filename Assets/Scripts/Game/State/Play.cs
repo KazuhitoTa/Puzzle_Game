@@ -1511,7 +1511,8 @@ public class Play : MonoBehaviour
 
     IEnumerator MovePlayer(List<Vector3> positions,int num)
     {
-        float speed = 1000.0f*Time.deltaTime; // 移動速度
+        float speed = (positions.Count/(30f*Time.deltaTime)); // 移動速度
+        Debug.Log(Time.deltaTime);
 
         foreach (var position in positions)
         {
