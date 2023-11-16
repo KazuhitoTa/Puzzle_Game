@@ -12,6 +12,10 @@ namespace kurukuru
     public class ButtonManager : MonoBehaviour
     {
         public static int stageNumber = 0;
+        private static RectTransform clickedButtonRect; // �����ꂽ�{�^���̈ʒu
+        private RectTransform myRectTransform;
+        private RectTransform[] buttonsRectTransform; // �{�^����RectTransform�̔z��
+        private Button[] buttons; // �{�^���̔z��
         private string fileName; // �t�@�C����
         private string filePath; // �t�@�C���p�X
 
@@ -29,13 +33,16 @@ namespace kurukuru
         }
         void Start()
         {
+           
+            
             int stage;
             if (int.TryParse(ReadSpecificValueFromCSV(0, 1), out stage))
             {
                 stage = stage + 1;
             }
             // Empty�I�u�W�F�N�g�̎q���ł���{�^�����擾
-            Button[] buttons = GetComponentsInChildren<Button>();
+            buttons = GetComponentsInChildren<Button>();
+            buttonsRectTransform = new RectTransform[buttons.Length];
 
             // �{�^���̐������J��Ԃ�
             for (int i = 0; i < buttons.Length; i++)
@@ -43,7 +50,7 @@ namespace kurukuru
                 // �{�^���Ƀe�L�X�g�R���|�[�l���g���A�^�b�`����Ă���ꍇ
                 TextMeshProUGUI buttonText = buttons[i].GetComponentInChildren<TextMeshProUGUI>();
                 Image[] images = buttons[i].GetComponentsInChildren<Image>(); // Image�̎擾
-
+                buttonsRectTransform[i] = buttons[i].transform as RectTransform;
                 if (buttonText != null)
                 {
                     int buttonNumber = i + 1;
@@ -69,12 +76,27 @@ namespace kurukuru
                     buttons[i].onClick.RemoveAllListeners(); // ���ׂẴN���b�N���X�i�[���폜
                 }
             }
+
+             myRectTransform = this.gameObject.transform as RectTransform;
+             clickedButtonRect=buttonsRectTransform[0];
+            if (myRectTransform != null)
+            {
+                myRectTransform.position = new Vector3(myRectTransform.position.x, -clickedButtonRect.anchoredPosition.y + 200,myRectTransform.position.z);
+                //Debug.Log("�R���e���g" + myRectTransform.position.y);
+                //myRectTransform.position = new Vector3(myRectTransform.position.x, -clickedButtonRect.anchoredPosition.y + 200, myRectTransform.position.z);
+                //Debug.Log(myRectTransform.position.y);
+            }
         }
 
         // �{�^�����N���b�N���ꂽ���̏���
         void OnButtonClick(int buttonNumber)
         {
-            Debug.Log("Button " + buttonNumber + " Clicked!");
+            clickedButtonRect = buttonsRectTransform[buttonNumber - 1];
+            //Debug.Log(clickedButtonRect.anchoredPosition);
+            if (clickedButtonRect != null)
+            {
+                //Debug.Log("�{�^��"+clickedButtonRect.position.y);
+            }
             stageNumber = buttonNumber;
             SceneManager.LoadScene("kurukuruGame");
         }
@@ -112,7 +134,7 @@ namespace kurukuru
                 Debug.LogError("CSV�t�@�C���̓ǂݍ��ݒ��ɃG���[���������܂���: " + e.Message);
             }
             return null;    // �Ԃ��l���Ȃ��ꍇ�Anull��Ԃ�
-        }
+        }   
     }
 }
 

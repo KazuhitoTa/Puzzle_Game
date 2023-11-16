@@ -10,6 +10,12 @@ TagManager:
   - redL90
   - redL180
   - redL270
+  - Play
+  - Pause
+  - GameClear
+  - GameOver
+  - Tutorial
+  - Ready
   layers:
   - Default
   - TransparentFX

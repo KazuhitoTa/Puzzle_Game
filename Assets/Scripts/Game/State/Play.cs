@@ -15,6 +15,8 @@ public class Play : MonoBehaviour
     [SerializeField]GameObject startOChanPrefab;
     [SerializeField]private List<GameObject> startOChan=new List<GameObject>(){null,null,null};
 
+    [SerializeField]List<Button> buttons=new();
+
     private List<bool> moveEndFlags=new List<bool>(){false,false,false};
     
     [SerializeField]GameObject gameCanvas;
@@ -150,6 +152,10 @@ public class Play : MonoBehaviour
 
     public void PlayInit()
     {
+         foreach (var item in buttons)
+        {
+            item.enabled=true;
+        }
         foreach (var item in animator)
         {
             item.enabled=true;
@@ -170,9 +176,20 @@ public class Play : MonoBehaviour
 
         if(!timeStop)
         {
-            playerNowHp -= Time.deltaTime * mapData.Maps[ButtonManager.stageNumber-1].Time; // 10の速度でHPを減少させる
-            
+            playerNowHp -= Time.deltaTime * mapData.Maps[ButtonManager.stageNumber-1].Time; // 10の速度でHPを減少させる 
+            foreach (var item in buttons)
+            {
+                item.enabled=true;
+            }
         }
+        else
+        {
+            foreach (var item in buttons)
+            {
+                item.enabled=false;
+            }
+        }
+    
             playerNowHp = Mathf.Max(0, playerNowHp); // HPが0未満にならないように制約をかける
 
             // HPバーを更新
@@ -194,6 +211,10 @@ public class Play : MonoBehaviour
         
         if(playerNowHp<=0)
         {
+            foreach (var item in buttons)
+            {
+                item.enabled=false;
+            }
             foreach (var item in animator)
             {
                 item.SetTrigger("Lose");
@@ -304,11 +325,16 @@ public class Play : MonoBehaviour
 
     public void PlayEnd()
     {
+        foreach (var item in buttons)
+        {
+            item.enabled=false;
+        }
+
         foreach (var item in clearObjects)
         {
             item.SetActive(false);
         }
-        
+
         leadyTimeBar.gameObject.SetActive(false);
     }
 
@@ -1110,6 +1136,7 @@ public class Play : MonoBehaviour
 
     public void InvPanel(int count)
     {
+        
         Debug.LogError(count<=0);
 
         Damaged();
@@ -1131,7 +1158,6 @@ public class Play : MonoBehaviour
 
     public void UntPanel(int count)
     {
-
         Debug.LogError(count<=0);
 
         Damaged();
@@ -1262,6 +1288,7 @@ public class Play : MonoBehaviour
 
     public void SetPause()
     {
+        
         foreach (var item in animator)
         {
             item.enabled=false;
@@ -1269,13 +1296,11 @@ public class Play : MonoBehaviour
         gameManager.ChangeGameState(GameManager.GameState.Pause);
     }
     
-    void OValPos(List<Vector2> movePosList)
+    public void EndPause()
     {
-        int temp=movePosList.Count-1;
-        Vector3 posTemp=tilePosList[(int)movePosList[temp].x][(int)movePosList[temp].y];
-        if((oChan.transform.position-posTemp).magnitude>=0.1f)
+        foreach (var item in buttons)
         {
-           
+            item.enabled=true;
         }
     }
 
@@ -1486,7 +1511,7 @@ public class Play : MonoBehaviour
 
     IEnumerator MovePlayer(List<Vector3> positions,int num)
     {
-        float speed = positions.Count*5.0f; // 移動速度
+        float speed = 1000.0f*Time.deltaTime; // 移動速度
 
         foreach (var position in positions)
         {
@@ -1505,5 +1530,14 @@ public class Play : MonoBehaviour
         return timeStop;
     }
 
+
+    public void ResetButton()
+    {
+        buttonNum=-1;
+        foreach (var item in buttonTempList)
+        {
+            item.SetActive(false);
+        }
+    }
 
 }

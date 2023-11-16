@@ -6,10 +6,9 @@ public class Tutorial : MonoBehaviour
 {
     public List<GameObject> tutorialObjList=new();
     int nowNum=0;
-    // Start is called before the first frame update
+    
     public void TutorialStart()
     {
-        
         foreach (var item in tutorialObjList)
         {
             item.SetActive(false);
@@ -17,12 +16,11 @@ public class Tutorial : MonoBehaviour
         tutorialObjList[0].SetActive(true);
     }
 
-    // Update is called once per frame
+    
     public void TutorialUpdate()
     {
         if ((Input.touchCount > 0 || Input.GetMouseButtonDown(0)))
         {
-             
             Touch touch;
             if (Input.touchCount > 0)
                 touch = Input.GetTouch(0);

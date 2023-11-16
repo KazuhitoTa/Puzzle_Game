@@ -112,6 +112,7 @@ public class Enemy :MonoBehaviour
                     // countSwitch切替
                     countSwitch = false;
 
+                   
                     // 攻撃アニメーション
                     //------------------------------
                     // ANIMATION OF ENEMY ATTACK!!!
@@ -146,7 +147,7 @@ public class Enemy :MonoBehaviour
                         missAtkFlog=true;
                         play.Grd();
                     }
-
+                     play.ResetButton();
                     waitCount = 0;
                 }
             }

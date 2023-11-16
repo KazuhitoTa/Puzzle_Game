@@ -17,12 +17,14 @@ namespace kurukuru
         [SerializeField]Tutorial tutorial;
         [SerializeField]GameClear gameClear;
         [SerializeField]GameOver gameOver;
+        [SerializeField]Ready ready;
         public GameState gameState=GameState.Play;
         [SerializeField]private List<bool> startCheck=new List<bool>();
 
 
         public enum GameState
         {
+            Ready,
             Play,
             Pause,
             Tutorial,
@@ -39,12 +41,20 @@ namespace kurukuru
                 startCheck.Add(false);
             }
             play.PlayStart();
+            ChangeGameState(GameState.Ready);
+            //gameState=GameState.Play;
+            
         }
 
         void Update()
         {
+            Debug.Log(gameState);
             switch (gameState)
             {
+                case GameState.Ready:
+                    //プレイ前の待ち時間の処理を書く
+                    break;
+
                 case GameState.Play:
                     // プレイ中の処理を実行
                     play.PlayUpdate();
@@ -77,14 +87,13 @@ namespace kurukuru
         }
 
         public void ChangeGameState(GameState gameStateTemp)
-        {
-            Debug.Log("end");
-            
+        {   
             if (gameStateTemp==GameState.Pause)     pause.PauseStart();
             else if (gameStateTemp==GameState.GameClear) gameClear.GameClearStart();
             else if (gameStateTemp==GameState.GameOver)  gameOver.GameOverStart();
             else if(gameStateTemp==GameState.Tutorial) tutorial.TutorialStart();
             else if (gameStateTemp==GameState.Play) play.PlayInit();
+            else if( gameStateTemp==GameState.Ready)ready.ReadyStart();
             gameState=gameStateTemp;
         }
 
