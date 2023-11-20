@@ -21,6 +21,8 @@ public class Cloud : Enemy
 	
 		rt = mapData.Maps[ButtonManager.stageNumber-1].rt;    // 行動の予測タイム ReadyTime
 		actParameter=mapData.Maps[ButtonManager.stageNumber-1].actParameter;
+		audioClip=mapData.Maps[ButtonManager.stageNumber-1].audioClip;
+		audioSource=gameObject.GetComponent<AudioSource>();
 
 		SetActPattern(actParameter);
 		play.EnemyInit(hp);
@@ -35,6 +37,7 @@ public class Cloud : Enemy
 		if(attackFlog)
 		{
 			enemyAnimator.SetTrigger("Atk");
+			audioSource.PlayOneShot(audioClip);
 			attackFlog=false;
 		}
 		else if(missAtkFlog)

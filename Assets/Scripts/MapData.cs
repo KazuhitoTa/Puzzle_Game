@@ -13,6 +13,8 @@ public class MapData : ScriptableObject
     public class Map
     {
         [SerializeField]private GameObject enemyPrefab;
+
+        [Multiline(3)]public string information;
         public int hp;          // 体力 HitPoint
         public float dec;       // 制限時間を減少させる値 Decrease
         public int inv;     // 暗闇にする個数 Invisible
@@ -20,11 +22,14 @@ public class MapData : ScriptableObject
         public int unt;     // 操作不可の個数 Untachable
         //int unttime = 0;  // 操作不可の時間 UntachableTime
         public float ct;        // 行動のクールタイム CoolTime
-        public Image image;
         
         public float rt;    // 行動の予測タイム ReadyTime
         public Vector3 actParameter;
+
+        public AudioClip audioClip;
         [SerializeField]private float time;
+        
+        public Sprite backImage;
         
         
 

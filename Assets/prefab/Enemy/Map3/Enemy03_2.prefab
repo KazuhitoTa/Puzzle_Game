@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7985603829030033907}
   - component: {fileID: 8842977036730290013}
   - component: {fileID: 8133714240427546440}
+  - component: {fileID: 4027107943975112592}
   m_Layer: 5
   m_Name: HotEarth
   m_TagString: Untagged
@@ -125,6 +126,8 @@ MonoBehaviour:
   waitCount: 0
   countSwitch: 0
   animator: {fileID: 0}
+  audioSource: {fileID: 0}
+  audioClip: {fileID: 0}
   mapData: {fileID: 11400000, guid: 3ad00016281249c4a8a7754b2bc4b14a, type: 2}
   actcol: 0
   enemyAnimator: {fileID: 276467305530218124}
@@ -136,6 +139,102 @@ MonoBehaviour:
   pauseFlog: 0
   ctTemp: 0
   weaponAnimator: {fileID: 1594495310205865086}
+--- !u!82 &4027107943975112592
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299489141921966725}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3118883216121035583
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +341,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 415dcae14d1adba438c17af5fe1a5ba2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ad0c670ad03aa5347bf76ffc9c5085a1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -340,7 +439,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e9f3a8e45139a2d47b34d9556c5737c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a7816223cc86ffb4eac84da1e77a280d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

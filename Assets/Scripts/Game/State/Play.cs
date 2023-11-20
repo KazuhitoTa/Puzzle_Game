@@ -12,12 +12,19 @@ using UnityEngine.UI;
 
 public class Play : MonoBehaviour
 {
+    [SerializeField]Color backColor;
+    [SerializeField]Image backImage;
+    [SerializeField]Slider BGMSlider;
+    [SerializeField]AudioSource BGMAudioSource;
+    [SerializeField]List<AudioClip> BGMAudioClips=new();
+    private bool hasPlayedFirstClip = false;
     [SerializeField]GameObject startOChanPrefab;
     [SerializeField]private List<GameObject> startOChan=new List<GameObject>(){null,null,null};
 
     [SerializeField]List<Button> buttons=new();
 
-    private List<bool> moveEndFlags=new List<bool>(){false,false,false};
+    //private List<bool> moveEndFlags=new List<bool>(){false,false,false};
+    bool moveEndFlags = false;
     
     [SerializeField]GameObject gameCanvas;
     [SerializeField]List<GameObject> playerGameObjects=new List<GameObject>(); 
@@ -75,6 +82,7 @@ public class Play : MonoBehaviour
     float tileScaleY;
 
     int buttonNum=-1;
+    private bool startCheckFlog;
 
     float startTime=0;
     float countTime;
@@ -93,6 +101,18 @@ public class Play : MonoBehaviour
     Vector2 invalid = new Vector2(-1, -1);  // kaneki
 
     private bool timeStop=false;
+
+    // kaneki
+    // 各色の正解ルート（ワールド座標）
+    List<List<Vector3>> correctPosList = new List<List<Vector3>>();
+    // 各色の目的地番号
+    int[] nextpos = { 1, 1, 1 };
+    // アニメーション途中か判断する変数
+    bool animing = false;
+    // おーちゃんの移動速度
+    float[] moveSpeed = { 0, 0, 0 };
+    // おーちゃんがパイプ状を歩く時間
+    float OchanWalkTime = 1.0f;
 
 
     Vector2[] goalPos = // ゴールの位置          
@@ -126,12 +146,21 @@ public class Play : MonoBehaviour
 
     public void PlayStart()
     {
+        backImage.sprite=mapData.Maps[ButtonManager.stageNumber-1].backImage;
+        backImage.color=backColor;
+        BGMSlider.value=TitleBGM.volume;
         csvFiles = new List<TextAsset>( Resources.LoadAll<TextAsset>(GetStageFilePath()));
         PanelLoading();
         //PanelLoading("StageData3/s_hard09");
 
+       
+
         // 各色クリアルートの確保
-        for (int i = 0; i < 3; i++) correctRoot.Add(new List<Vector2>());
+        for (int i = 0; i < 3; i++)
+        {
+            correctRoot.Add(new List<Vector2>());
+            correctPosList.Add(new List<Vector3>());
+        }
 
         GridInit();
         enemyNowHp=enemyMaxHp;
@@ -152,7 +181,13 @@ public class Play : MonoBehaviour
 
     public void PlayInit()
     {
-         foreach (var item in buttons)
+        if(!startCheckFlog)
+        {
+            PlayFirstClip();
+            startCheckFlog=true;
+        }
+    
+        foreach (var item in buttons)
         {
             item.enabled=true;
         }
@@ -201,6 +236,7 @@ public class Play : MonoBehaviour
 
         if(enemyNowHp<=0)
         {
+            backImage.color=new Color(255f,255f,255f,255f);
             PlayEnd();
             foreach (var item in animator)
             {
@@ -277,21 +313,22 @@ public class Play : MonoBehaviour
             }
         }
 
+        // ゴールした時の処理
         if (allColorCorrect)
         {
             //敵の行動一時停止
-            
-            
+
+
             //アニメーション終了後にパズルの時間停止
             //時間制限停止
-            timeStop=true;
+            timeStop = true;
             //ピースの操作停止
             foreach (var items in grid)
             {
                 foreach (var item in items)
                 {
-                    var temp=item.GetComponent<BoxCollider2D>();
-                    if(temp!=null)temp.enabled=false;
+                    var temp = item.GetComponent<BoxCollider2D>();
+                    if (temp != null) temp.enabled = false;
                 }
             }
 
@@ -303,22 +340,57 @@ public class Play : MonoBehaviour
             {
                 Destroy(item);
             }
-            animator[0].SetTrigger("Atk");
+            
 
-            GetCorrectRoot();
-            //アニメーション再生
-            MoveOchan(correctRoot);
-            allColorCorrect=false;
-        }
-        if(moveEndFlags[0]&&moveEndFlags[1]&&moveEndFlags[2])
-        {
-            ResetPazzle(); 
-            PanelLoading();
-            GridInit(); 
-            moveEndFlags[0]=false;
-            moveEndFlags[1]=false;
-            moveEndFlags[2]=false;
-            timeStop=false;
+            // kaneki
+            // 1回だけ処理
+            if (!animing)
+            {
+                animing = true;
+                animator[0].SetTrigger("Atk");
+
+                // 正解ルートの取得
+                GetCorrectRoot();
+                for (int i = 0; i < 3; i++)
+                {
+                    Debug.Log("correctRoot[" + i + "].Count = " + correctRoot[i].Count);
+                }
+
+
+                // 正解ルートの座標変換
+                ConvertCorrectRoot(correctRoot);
+
+                // 移動速度の計算
+                for (int i = 0; i < 3; i++)
+                {
+                    if (goalPos[i] == invalid) continue;
+
+                    moveSpeed[i] = CalcMoveSpeed(i, OchanWalkTime);
+                    Debug.Log("moveSpeed[" + i + "] = " + moveSpeed[i]);
+                }
+            }
+            // アニメーション中の処理
+            else if (animing)
+            {
+                // おーちゃんの移動アニメーション
+                for (int i = 0; i < 3; i++)
+                {
+                    // 色が無かったらスキップ
+                    if (goalPos[i] == invalid) continue;
+
+                    MoveOchan(i, 1.0f);
+                }
+            }
+            // ゴールしたらパネルリセット
+            if (moveEndFlags)
+            {
+                ResetPazzle();
+                PanelLoading();
+                GridInit();
+                moveEndFlags = false;
+                timeStop = false;
+                animing = false;
+            }
         }
         
     }
@@ -1096,6 +1168,17 @@ public class Play : MonoBehaviour
         {
             correctRoot[i].Clear();
         }
+
+        for (int i = 0; i < 3; i++)
+        {
+            // correctPosList
+            correctPosList[i].Clear();
+            Debug.Log("correctPosList[" + i + "].Count = " + correctRoot[i].Count);
+            // nextpos
+            nextpos[i] = 1;
+            // moveSpeed
+            moveSpeed[i] = 0;
+        }
         
         //flowmeterCheck
         flowmeterCheck.Clear();
@@ -1469,61 +1552,149 @@ public class Play : MonoBehaviour
         }
     }
 
-    public void MoveOchan(List<List<Vector2>> List)
-    {
-        var red=List[0];
-        var green=List[1];
-        var blue=List[2];
 
-        List<Vector3> redPosList=new List<Vector3>();
-        List<Vector3> greenPosList=new List<Vector3>();
-        List<Vector3> bluePosList=new List<Vector3>();
+    public void ConvertCorrectRoot(List<List<Vector2>> List)
+    {
+        var red = List[0];
+        var green = List[1];
+        var blue = List[2];
 
         foreach (var item in red)
         {
-            redPosList.Add(tilePosList[(int)item.y][(int)item.x]);
+            correctPosList[0].Add(tilePosList[(int)item.y][(int)item.x]);
         }
 
         foreach (var item in green)
         {
-            greenPosList.Add(tilePosList[(int)item.y][(int)item.x]);
+            correctPosList[1].Add(tilePosList[(int)item.y][(int)item.x]);
         }
 
         foreach (var item in blue)
         {
-            bluePosList.Add(tilePosList[(int)item.y][(int)item.x]);
+            correctPosList[2].Add(tilePosList[(int)item.y][(int)item.x]);
         }
-        redPosList.Reverse();
-        greenPosList.Reverse();
-        bluePosList.Reverse();
-        
+        correctPosList[0].Reverse();
+        correctPosList[1].Reverse();
+        correctPosList[2].Reverse();
 
-        Debug.Log("赤"+redPosList.Count);
-        Debug.Log("緑"+greenPosList.Count);
-        Debug.Log("青"+bluePosList.Count);
 
-        StartCoroutine(MovePlayer(redPosList,0));
-        StartCoroutine(MovePlayer(greenPosList,1));
-        StartCoroutine(MovePlayer(bluePosList,2));
-        
-    
+        //Debug.Log("赤"+redPosList.Count);
+        //Debug.Log("緑"+greenPosList.Count);
+        //Debug.Log("青"+bluePosList.Count);
+
+        //StartCoroutine(MovePlayer(redPosList,0));
+        //StartCoroutine(MovePlayer(greenPosList,1));
+        //StartCoroutine(MovePlayer(bluePosList,2));
     }
 
-    IEnumerator MovePlayer(List<Vector3> positions,int num)
+    // kaneki
+    // 移動速度を計算する
+    float CalcMoveSpeed(int col, float time)
     {
-        float speed = (positions.Count/(30f*Time.deltaTime)); // 移動速度
-        Debug.Log(Time.deltaTime);
+        // 移動時間
+        float moveTime = time;
+        // 移動距離
+        float tileDistance = tilePosList[0][1].x - tilePosList[0][0].x;
+        float moveDistance = tileDistance * (correctRoot[col].Count - 1);
+        // 移動速度計算
+        float moveSpeed = (moveDistance / (moveTime * Time.deltaTime * 3333));
 
-        foreach (var position in positions)
+        return moveSpeed;
+    }
+
+    // kaneki
+    // 正解ルート上をおーちゃんが等速移動する
+    void MoveOchan(int num, float time)
+    {
+        Vector3 tmppos = startOChan[num].transform.position;    // 仮置座標変数
+        float overline = 0.0f;  // チェックポイントを超えた長さ
+
+        // ① 今.x → 次.x
+        if (correctPosList[num][nextpos[num] -1].x < correctPosList[num][nextpos[num]].x)
         {
-            while (Vector3.Distance(startOChan[num].transform.position, position) > 0.01f)
+            tmppos.x += moveSpeed[num];
+            if (tmppos.x > correctPosList[num][nextpos[num]].x)
             {
-                startOChan[num].transform.position = Vector3.MoveTowards(startOChan[num].transform.position, position, speed * Time.deltaTime);
-                yield return null;
+                overline = tmppos.x - correctPosList[num][nextpos[num]].x;
+                tmppos.x = correctPosList[num][nextpos[num]].x;
+                nextpos[num]++;
+                Debug.Log("nextpos = [" + num + "]" + nextpos[num]);
             }
-            yield return new WaitForSeconds(0);
         }
-        moveEndFlags[num]=true;
+        // ② 次.x ← 今.x
+        else if (correctPosList[num][nextpos[num] - 1].x > correctPosList[num][nextpos[num]].x)
+        {
+            tmppos.x -= moveSpeed[num];
+            if (tmppos.x < correctPosList[num][nextpos[num]].x)
+            {
+                overline = correctPosList[num][nextpos[num]].x - tmppos.x;
+                tmppos.x = correctPosList[num][nextpos[num]].x;
+                nextpos[num]++;
+                Debug.Log("nextpos = [" + num + "]" + nextpos[num]);
+            }
+        }
+        // ③ 今.y ↑ 次.y
+        else if (correctPosList[num][nextpos[num] - 1].y < correctPosList[num][nextpos[num]].y)
+        {
+            tmppos.y += moveSpeed[num];
+            if (tmppos.y > correctPosList[num][nextpos[num]].y)
+            {
+                overline = tmppos.y - correctPosList[num][nextpos[num]].y;
+                tmppos.y = correctPosList[num][nextpos[num]].y;
+                nextpos[num]++;
+                Debug.Log("nextpos = [" + num + "]" + nextpos[num]);
+            }
+        }
+        // ④ 今.y ↓ 次.y
+        else if (correctPosList[num][nextpos[num] - 1].y > correctPosList[num][nextpos[num]].y)
+        {
+            tmppos.y -= moveSpeed[num];
+            if (tmppos.y < correctPosList[num][nextpos[num]].y)
+            {
+                overline = tmppos.y - correctPosList[num][nextpos[num]].y;
+                tmppos.y = correctPosList[num][nextpos[num]].y;
+                nextpos[num]++;
+                Debug.Log("nextpos[" + num + "] = " + nextpos[num]);
+            }
+        }
+
+        // ゴール判定
+        if (nextpos[num] >= correctPosList[num].Count)
+        {
+            Debug.Log(num + " がゴールしました");
+            moveEndFlags = true;
+        }
+        // 超過距離を進める
+        else if (overline > 0.0f)
+        {
+            // ① 今.x → 次.x
+            if (correctPosList[num][nextpos[num] - 1].x < correctPosList[num][nextpos[num]].x)
+            {
+                tmppos.x += overline;
+                overline = 0;
+            }
+            // ② 次.x ← 今.x
+            else if (correctPosList[num][nextpos[num] - 1].x > correctPosList[num][nextpos[num]].x)
+            {
+                tmppos.x -= overline;
+                overline = 0;
+            }
+            // ③ 今.y ↑ 次.y
+            else if (correctPosList[num][nextpos[num] - 1].y < correctPosList[num][nextpos[num]].y)
+            {
+                tmppos.y += overline;
+                overline = 0;
+            }
+            // ④ 今.y ↓ 次.y
+            else if (correctPosList[num][nextpos[num] - 1].y > correctPosList[num][nextpos[num]].y)
+            {
+                tmppos.y -= overline;
+                overline = 0;
+            }
+        }
+
+        // 座標適用
+        startOChan[num].transform.position = tmppos;
     }
 
     public bool enemyStop()
@@ -1539,6 +1710,35 @@ public class Play : MonoBehaviour
         {
             item.SetActive(false);
         }
+    }
+
+    private void PlayFirstClip()
+    {
+        BGMAudioSource.clip = BGMAudioClips[0]; // 1番目のクリップを設定
+        BGMAudioSource.Play(); // 1番目のクリップを再生
+    }
+
+    public bool BGMCheck()
+    {
+       return BGMAudioSource.isPlaying;
+    }
+
+    public bool startCheck()
+    {
+        return startCheckFlog;
+    }
+
+    public void BGMPlay()
+    {
+        BGMAudioSource.clip = BGMAudioClips[1]; // 2番目のクリップを設定
+        BGMAudioSource.Play(); // 2番目のクリップを再生
+        BGMAudioSource.loop = true; // ループ再生を有効にする
+    }
+
+    public void SoundVolume(float volume)
+    {
+        BGMAudioSource.volume =volume;
+        TitleBGM.volume=volume;
     }
 
 }

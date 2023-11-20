@@ -5,6 +5,9 @@ using UnityEngine;
 public class Tutorial : MonoBehaviour
 {
     public List<GameObject> tutorialObjList=new();
+
+    [SerializeField]List<Color> color=new();
+   
     int nowNum=0;
     
     public void TutorialStart()
@@ -19,6 +22,8 @@ public class Tutorial : MonoBehaviour
     
     public void TutorialUpdate()
     {
+        
+
         if ((Input.touchCount > 0 || Input.GetMouseButtonDown(0)))
         {
             Touch touch;

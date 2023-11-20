@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: OvalBS10
-  productName: Puzzle_Game
+  productName: "\u304A\u30FC\u3061\u3083\u3093\u3070\u308B\u3061\u3083\u3093\u304F\u308B\u304F\u308B\u30D1\u30BA\u30EB"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}

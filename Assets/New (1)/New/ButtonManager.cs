@@ -11,6 +11,11 @@ namespace kurukuru
 {
     public class ButtonManager : MonoBehaviour
     {
+        [SerializeField] GameObject stagePopup;
+        [SerializeField] MapData map;
+        [SerializeField] TextMeshProUGUI text;
+        [SerializeField] List<GameObject> gameObjects =new();
+
         public static int stageNumber = 0;
         public static int selectNumber = 0;
         private RectTransform clickedButtonRect; // �����ꂽ�{�^���̈ʒu
@@ -34,6 +39,7 @@ namespace kurukuru
         }
         void Start()
         {   
+            stagePopup.SetActive(false);
             int stage;
             if (int.TryParse(ReadSpecificValueFromCSV(0, 1), out stage))
             {
@@ -111,7 +117,8 @@ namespace kurukuru
             selectNumber = buttonNumber;
             SaveToCSV(1,1,selectNumber);
             Debug.Log(buttonNumber);
-            SceneManager.LoadScene("kurukuruGame");
+            PopUp();
+            
         }
 
 
@@ -177,7 +184,27 @@ namespace kurukuru
             {
                 Debug.LogError("書き込み失敗" + e.Message);
             }
+        }
+
+        void PopUp()
+        {
+            text.text=map.Maps[stageNumber-1].information;
+            int index = stageNumber - 1;
+            for (int i = 0; i < gameObjects.Count; i++) {
+                gameObjects[i].SetActive(i == index);
+            }
+
+            stagePopup.SetActive(true);
         } 
+
+        public void back()
+        {
+            stagePopup.SetActive(false);
+        }
+        public void GameStart()
+        {
+            SceneManager.LoadScene("kurukuruGame");
+        }
     }
 }
 

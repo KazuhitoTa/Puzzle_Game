@@ -21,6 +21,8 @@ namespace kurukuru
         public GameState gameState=GameState.Play;
         [SerializeField]private List<bool> startCheck=new List<bool>();
 
+        
+
 
         public enum GameState
         {
@@ -47,12 +49,12 @@ namespace kurukuru
             }
             play.PlayStart();
             ChangeGameState(GameState.Ready);
-            //gameState=GameState.Play;
             
         }
 
         void Update()
         {
+            if(!play.BGMCheck()&&play.startCheck())play.BGMPlay();
             Debug.Log(gameState);
             switch (gameState)
             {

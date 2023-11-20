@@ -24,6 +24,9 @@ public class Enemy :MonoBehaviour
     public bool countSwitch = false;    // waitCountのスイッチ
     public Animator animator;
 
+    public AudioSource audioSource;
+    public AudioClip audioClip;
+
     public MapData mapData;
 
     public int actcol=0;
