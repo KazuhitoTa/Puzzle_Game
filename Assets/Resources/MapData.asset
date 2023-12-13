@@ -110,7 +110,7 @@ MonoBehaviour:
     time: 1.5
     backImage: {fileID: 21300000, guid: 0d43f9288f5216545be13d712b996b2c, type: 3}
   - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
-    information: "\u6700\u5F37\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\n\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\n\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01\uFF01"
+    information: "\u6700\u5F37\uFF01\uFF01"
     hp: 100
     dec: 20
     inv: 15
@@ -136,24 +136,24 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 1429727102173041942, guid: 10c1369053662b849bf65d3804d3e751, type: 3}
     information: "\u9AEA"
     hp: 300
-    dec: 50
-    inv: 0
+    dec: 25
+    inv: 25
     unt: 0
     ct: 4
-    rt: 3
-    actParameter: {x: 100, y: 0, z: 0}
+    rt: 2.5
+    actParameter: {x: 34, y: 33, z: 33}
     audioClip: {fileID: 8300000, guid: 168dd39fe0b6ecd41bcba78975040cb3, type: 3}
-    time: 2
+    time: 2.5
     backImage: {fileID: 21300000, guid: 221594880168c0f4f99cc0f7b6b3723b, type: 3}
   - enemyPrefab: {fileID: 3118883216121035583, guid: 2ee08ad6e6193074ea32af60872a8099, type: 3}
     information: "\u795E"
     hp: 500
-    dec: 80
-    inv: 0
-    unt: 0
+    dec: 30
+    inv: 30
+    unt: 30
     ct: 5
     rt: 2
-    actParameter: {x: 100, y: 0, z: 0}
+    actParameter: {x: 50, y: 25, z: 25}
     audioClip: {fileID: 8300000, guid: 168dd39fe0b6ecd41bcba78975040cb3, type: 3}
     time: 3
     backImage: {fileID: 21300000, guid: 221594880168c0f4f99cc0f7b6b3723b, type: 3}

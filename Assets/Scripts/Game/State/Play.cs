@@ -12,9 +12,12 @@ using UnityEngine.UI;
 
 public class Play : MonoBehaviour
 {
+    private string fileName;
+    private string filePath;
     [SerializeField]Color backColor;
     [SerializeField]Image backImage;
     [SerializeField]Slider BGMSlider;
+    [SerializeField]Slider SESlider;
     [SerializeField]AudioSource BGMAudioSource;
     [SerializeField]List<AudioClip> BGMAudioClips=new();
     private bool hasPlayedFirstClip = false;
@@ -31,7 +34,7 @@ public class Play : MonoBehaviour
     [SerializeField] List<Animator> animator=new List<Animator>();
     [SerializeField]MapData mapData;
     [SerializeField] AudioSource audioSource;
-    [SerializeField]public AudioClip sound1;
+    [SerializeField]public List<AudioClip> sound=new List<AudioClip>();
     [SerializeField]List<Color> leadyTimeBarColor=new List<Color>();
     private List<List<GameObject>> grid = new List<List<GameObject>>();
     private List<List<Panel>> gridState = new List<List<Panel>>();          
@@ -114,6 +117,8 @@ public class Play : MonoBehaviour
     // おーちゃんがパイプ状を歩く時間
     float OchanWalkTime = 1.0f;
 
+    int canPutCount;
+
 
     Vector2[] goalPos = // ゴールの位置          
     {
@@ -146,9 +151,14 @@ public class Play : MonoBehaviour
 
     public void PlayStart()
     {
+        fileName = "SaveData.csv";
+        filePath = System.IO.Path.Combine(Application.persistentDataPath, fileName);
         backImage.sprite=mapData.Maps[ButtonManager.stageNumber-1].backImage;
         backImage.color=backColor;
-        BGMSlider.value=TitleBGM.volume;
+        BGMAudioSource.volume=TitleBGM.BGMVolume;
+        audioSource.volume=TitleBGM.SEVolume;
+        BGMSlider.value=TitleBGM.BGMVolume;
+        SESlider.value=TitleBGM.SEVolume;
         csvFiles = new List<TextAsset>( Resources.LoadAll<TextAsset>(GetStageFilePath()));
         PanelLoading();
         //PanelLoading("StageData3/s_hard09");
@@ -175,7 +185,6 @@ public class Play : MonoBehaviour
             animator.Add(tmp.GetComponent<Animator>());
         }
         // clearObjects.Add(temp);
-        Debug.Log(mapData.Maps[ButtonManager.stageNumber].Time);
         
     }
 
@@ -236,6 +245,7 @@ public class Play : MonoBehaviour
 
         if(enemyNowHp<=0)
         {
+            ClearBGM();
             backImage.color=new Color(255f,255f,255f,255f);
             PlayEnd();
             foreach (var item in animator)
@@ -247,6 +257,7 @@ public class Play : MonoBehaviour
         
         if(playerNowHp<=0)
         {
+            GameOverBGM();
             foreach (var item in buttons)
             {
                 item.enabled=false;
@@ -271,7 +282,7 @@ public class Play : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                audioSource.PlayOneShot(sound1);
+                audioSource.PlayOneShot(sound[0]);
                 isRotate = true;
                 clickObject = GetClickObj();
                 startAngleZ = clickObject.transform.localEulerAngles.z;
@@ -551,6 +562,7 @@ public class Play : MonoBehaviour
 
     void GridInit()
     {   
+        canPutCount=mapSizeX*mapSizeY;
         UnityEngine.Random.InitState(DateTime.Now.Millisecond);
 
         // 流量計生成用の仮リスト
@@ -604,10 +616,12 @@ public class Play : MonoBehaviour
                     if      (gridState[r][c].col == "red")    goalPos[(int)COLOR.RED]   = new Vector2(c, r);
                     else if (gridState[r][c].col == "green")  goalPos[(int)COLOR.GREEN] = new Vector2(c, r);
                     else if (gridState[r][c].col == "blue")   goalPos[(int)COLOR.BLUE]  = new Vector2(c, r);
+                    canPutCount-=2;
                 }
                 // 流量計を書いているかどうか確認
                 else if ((gridState[r][c].num == 15) || (gridState[r][c].num == 16))
                 {
+                    canPutCount--;
                     if      (gridState[r][c].col == "red")
                     {
                         redFlowMeterFlg=true;
@@ -634,6 +648,7 @@ public class Play : MonoBehaviour
         // RED
         if (tmpRedList.Any()&&!redFlowMeterFlg)
         {
+            canPutCount--;
             Vector2 redFlowMeter = tmpRedList[UnityEngine.Random.Range(0, tmpRedList.Count)];
             var tmp = gridState[(int)redFlowMeter.y][(int)redFlowMeter.x];
             tmp.num += 14;
@@ -644,6 +659,7 @@ public class Play : MonoBehaviour
         // GREEN
         if (tmpGreenList.Any()&&!greenFlowMeterFlg)
         {
+            canPutCount--;
             Vector2 greenFlowMeter = tmpGreenList[UnityEngine.Random.Range(0, tmpGreenList.Count)];
             var tmp = gridState[(int)greenFlowMeter.y][(int)greenFlowMeter.x];
             tmp.num += 14;
@@ -653,6 +669,7 @@ public class Play : MonoBehaviour
         // BLUE
         if (tmpBlueList.Any()&&!blueFlowMeterFlg)
         {
+            canPutCount--;
             Vector2 blueFlowMeter = tmpBlueList[UnityEngine.Random.Range(0, tmpBlueList.Count)];
             var tmp = gridState[(int)blueFlowMeter.y][(int)blueFlowMeter.x];
             tmp.num += 14;
@@ -742,6 +759,7 @@ public class Play : MonoBehaviour
                 //生成したTileをgridに保存
                 grid[row][col] = tile;
 
+                Debug.Log(canPutCount);
             }
         }
     }
@@ -1219,9 +1237,7 @@ public class Play : MonoBehaviour
 
     public void InvPanel(int count)
     {
-        
-        Debug.LogError(count<=0);
-
+    
         Damaged();
         List<(int,int)> pos=new List<(int, int)>();
         
@@ -1241,13 +1257,13 @@ public class Play : MonoBehaviour
 
     public void UntPanel(int count)
     {
-        Debug.LogError(count<=0);
 
         Damaged();
         List<(int,int)> pos=new List<(int, int)>();
 
-        pos =PosRand(count);
 
+
+        pos =PosRand(count);
 
         untObj.transform.localScale = new Vector3(tileScaleX, tileScaleY, 1);
         List<BoxCollider2D> bind=new List<BoxCollider2D>();
@@ -1269,6 +1285,7 @@ public class Play : MonoBehaviour
 
     List<(int,int)> PosRand(int count)
     {
+        if(count>canPutCount)count=canPutCount;
         List<(int,int)> temp=new List<(int, int)>();
 
         while (temp.Count<count)
@@ -1738,7 +1755,69 @@ public class Play : MonoBehaviour
     public void SoundVolume(float volume)
     {
         BGMAudioSource.volume =volume;
-        TitleBGM.volume=volume;
+        TitleBGM.BGMVolume=volume;
+        SaveToCSV(2,1,volume);
+    }
+    public void SEVolume(float volume)
+    {
+        audioSource.volume =volume;
+        TitleBGM.SEVolume=volume;
+        SaveToCSV(2,1,volume);
+    }
+
+    public void SE1()
+    {
+        audioSource.PlayOneShot(sound[1]);
+    }
+
+    public void ClearBGM()
+    {
+        BGMAudioSource.clip = BGMAudioClips[2]; // 2番目のクリップを設定
+        BGMAudioSource.Play(); // 2番目のクリップを再生
+        BGMAudioSource.loop = false; // ループ再生を有効にする
+    }
+
+    public void GameOverBGM()
+    {
+        BGMAudioSource.enabled=false;
+        // BGMAudioSource.clip = BGMAudioClips[3]; // 2番目のクリップを設定
+        // BGMAudioSource.Play(); // 2番目のクリップを再生
+        // BGMAudioSource.loop = false; // ループ再生を有効にする
+    }
+
+    public void BottonSE()
+    {
+        audioSource.PlayOneShot(sound[2]);
+    }
+
+    void SaveToCSV(int writeColPlace, int writeRowPlace, float writeValue)
+    {
+        try
+        {
+            string[] lines = File.ReadAllLines(filePath);   // 列ごとに読み込み
+            if (writeColPlace < lines.Length)               // 列の座標が配列の長さ未満かどうかを確認
+            {
+                string[] elements = lines[writeColPlace].Split(',');  // 行の座標に対応する行を取得しカンマで分割して配列elementsに格納
+                if (writeRowPlace < elements.Length)                  // 行の座標が配列の長さ未満かどうかを確認
+                {
+                    elements[writeRowPlace] = writeValue.ToString();      // 文字列に変換し、elements内の指定された列の座標の要素を変更
+                    lines[writeColPlace] = string.Join(",", elements);    // elementsを再びカンマで連結（しないといけないらしい）
+                    File.WriteAllLines(filePath, lines);                // 更新されたlinesを書き込み
+                }
+                else
+                {
+                    Debug.LogError("指定された行が範囲外です");
+                }
+            }
+            else
+            {
+                Debug.LogError("指定された列が範囲外です");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("書き込み失敗" + e.Message);
+        }
     }
 
 }

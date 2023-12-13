@@ -19,10 +19,10 @@ namespace kurukuru
         [SerializeField]GameOver gameOver;
         [SerializeField]Ready ready;
         public GameState gameState=GameState.Play;
-        [SerializeField]private List<bool> startCheck=new List<bool>();
+       
 
-        
-
+        private string fileName;
+        private string filePath;
 
         public enum GameState
         {
@@ -43,18 +43,21 @@ namespace kurukuru
 
         void Start()
         {
-            for(int i=0;i<Enum.GetValues(typeof(GameState)).Length;i++)
-            {
-                startCheck.Add(false);
-            }
+            fileName="SaveData.csv";
+            filePath = System.IO.Path.Combine(Application.persistentDataPath, fileName);
             play.PlayStart();
-            ChangeGameState(GameState.Ready);
             
+            if(ReadSpecificValueFromCSV(4, 1)=="false")
+            {
+                ChangeGameState(GameState.Tutorial);
+                SaveToCSV(4,1,"true");
+            }
+            else ChangeGameState(GameState.Ready);
         }
 
         void Update()
         {
-            if(!play.BGMCheck()&&play.startCheck())play.BGMPlay();
+            if(!play.BGMCheck()&&play.startCheck()&&gameState!=GameState.GameClear)play.BGMPlay();
             Debug.Log(gameState);
             switch (gameState)
             {
@@ -104,14 +107,6 @@ namespace kurukuru
             gameState=gameStateTemp;
         }
 
-        void ResetGameStart(int StateNum)
-        {
-            for(int i=0;i<Enum.GetValues(typeof(GameState)).Length;i++)
-            {
-                if(i==StateNum)startCheck[i]=true;
-                else startCheck[i]=false;
-            }
-        }
 
         public void GoStageSelect()
         {
@@ -125,6 +120,67 @@ namespace kurukuru
         public GameManager.GameState GetGameState()
         {
             return gameState;
+        }
+
+        string ReadSpecificValueFromCSV(int roadColPlace, int roadRowPlace)
+        {
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);   // �s���Ƃɓǂݍ���
+                                                                // ��̍��W���z��̒����������ǂ������m�F
+                if (roadColPlace < lines.Length)
+                {
+                    string[] elements = lines[roadColPlace].Split(','); // �s�̍��W�ɑΉ�����s���擾���J���}�ŕ������Ĕz��elements�Ɋi�[
+                                                                        // �s�̍��W���z��̒����������ǂ������m�F
+                    if (roadRowPlace < elements.Length)
+                    {
+                        return elements[roadRowPlace];  //string�Œl��Ԃ�
+                    }
+                    else
+                    {
+                        Debug.LogError("�w�肳�ꂽ�s���͈͊O�ł�");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("�w�肳�ꂽ�񂪔͈͊O�ł�");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("CSV�t�@�C���̓ǂݍ��ݒ��ɃG���[���������܂���: " + e.Message);
+            }
+            return null;    // �Ԃ��l���Ȃ��ꍇ�Anull��Ԃ�
+        }  
+
+        void SaveToCSV(int writeColPlace, int writeRowPlace, string writeValue)
+        {
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);   // 列ごとに読み込み
+                if (writeColPlace < lines.Length)               // 列の座標が配列の長さ未満かどうかを確認
+                {
+                    string[] elements = lines[writeColPlace].Split(',');  // 行の座標に対応する行を取得しカンマで分割して配列elementsに格納
+                    if (writeRowPlace < elements.Length)                  // 行の座標が配列の長さ未満かどうかを確認
+                    {
+                        elements[writeRowPlace] = writeValue;      // 文字列に変換し、elements内の指定された列の座標の要素を変更
+                        lines[writeColPlace] = string.Join(",", elements);    // elementsを再びカンマで連結（しないといけないらしい）
+                        File.WriteAllLines(filePath, lines);                // 更新されたlinesを書き込み
+                    }
+                    else
+                    {
+                        Debug.LogError("指定された行が範囲外です");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("指定された列が範囲外です");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("書き込み失敗" + e.Message);
+            }
         }
 
     }

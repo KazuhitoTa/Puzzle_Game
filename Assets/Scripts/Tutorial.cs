@@ -1,29 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using kurukuru;
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour
 {
-    public List<GameObject> tutorialObjList=new();
+    [SerializeField]List<GameObject> TutorialObjList=new List<GameObject>();
 
-    [SerializeField]List<Color> color=new();
+    [SerializeField]List<Color> color=new List<Color>();
+    private GameManager gameManager;
+
+    [SerializeField]AudioClip audioClip;
+    [SerializeField]AudioSource audioSource;
    
     int nowNum=0;
     
     public void TutorialStart()
     {
-        foreach (var item in tutorialObjList)
+        Debug.Log("start" + TutorialObjList.Count);
+        foreach (var item in TutorialObjList)
         {
             item.SetActive(false);
         }
-        tutorialObjList[0].SetActive(true);
+        TutorialObjList[0].SetActive(true);
+
+        gameManager=GameObject.FindWithTag("GameController").GetComponent<GameManager>();
     }
 
     
     public void TutorialUpdate()
     {
         
-
+        Debug.Log("update" + TutorialObjList.Count);
         if ((Input.touchCount > 0 || Input.GetMouseButtonDown(0)))
         {
             Touch touch;
@@ -34,16 +42,22 @@ public class Tutorial : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                if(nowNum==5)
+                if(nowNum>=15)
                 {
-                    nowNum=0;
-                    tutorialObjList[5].SetActive(false);
+                    foreach (var item in TutorialObjList)
+                    {
+                        item.SetActive(false);
+                    }
+                    gameManager.ChangeGameState(GameManager.GameState.Ready);
+                }
+                else 
+                {
+                    audioSource.PlayOneShot(audioClip);
+                    nowNum++;
+                    TutorialObjList[nowNum].SetActive(true);
                 }
                 
-                
-                else nowNum++;
-                tutorialObjList[nowNum].SetActive(true);
-                if(nowNum!=0) tutorialObjList[nowNum-1].SetActive(false);
+                if(nowNum!=0) TutorialObjList[nowNum-1].SetActive(false);
             }
         }
     }
